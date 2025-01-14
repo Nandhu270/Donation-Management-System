@@ -1,0 +1,115 @@
+.navbar {
+  background-color: #ffffff;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  padding: 15px 20px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.navbar:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.navbar-brand img {
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+}
+
+.navbar-brand img:hover {
+  transform: scale(1.2); 
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #007bff;
+}
+
+.navbar-brand:hover {
+  color: #0056b3;
+}
+
+.navbar-nav .nav-link {
+  color: #555;
+  margin: 0 10px;
+  font-size: 1.2rem;
+  font-weight: 530;
+  text-transform: capitalize;
+  letter-spacing: 0.5px;
+  transition: color 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.navbar-nav .nav-link:hover {
+  color: #007bff;
+  transform: translateY(-2px);
+}
+
+.navbar-nav .nav-link.active {
+  color: #0056b3;
+  font-weight: bold;
+  border-bottom: 2px solid #007bff;
+}
+
+.navbar-toggler {
+  border: none;
+  padding: 5px;
+  background-color: transparent;
+}
+
+.navbar-toggler-icon {
+  background-color: #333;
+  width: 30px;
+  height: 3px;
+  position: relative;
+  transition: background-color 0.3s ease;
+}
+
+.navbar-toggler-icon:hover {
+  background-color: #007bff;
+}
+
+.navbar-toggler-icon::before,
+.navbar-toggler-icon::after {
+  content: "";
+  background-color: #333;
+  width: 30px;
+  height: 3px;
+  display: block;
+  position: absolute;
+  left: 0;
+  transition: background-color 0.3s ease;
+}
+
+.navbar-toggler-icon:hover::before,
+.navbar-toggler-icon:hover::after {
+  background-color: #007bff;
+}
+
+.navbar-toggler-icon::before {
+  top: -8px;
+}
+
+.navbar-toggler-icon::after {
+  top: 8px;
+}
+
+@media (max-width: 576px) {
+  .navbar-collapse {
+    background-color: #ffffff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+  }
+
+  .navbar-nav .nav-link {
+    margin: 10px 0;
+    text-align: center;
+    font-size: 1rem;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .navbar-nav .nav-link:hover {
+    background-color: #f1f1f1;
+  }
+}
