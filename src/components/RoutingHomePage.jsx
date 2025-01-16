@@ -7,6 +7,7 @@ import Donate from "../pages/Donate";
 import Login from "../pages/login";
 import About from "../pages/About";
 import NavBar from "./Navbar";
+import Footer from "./Footer";
 
 function HomePage() {
   return (
@@ -20,6 +21,7 @@ function HomePage() {
         <Route path="/about" element={<About />} />
         <Route path="/login" element={<Login />} />
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 }

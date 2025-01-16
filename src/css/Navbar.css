@@ -15,7 +15,7 @@
 }
 
 .navbar-brand img:hover {
-  transform: scale(1.2); 
+  transform: scale(1.2);
 }
 
 .navbar-brand {
@@ -29,7 +29,7 @@
 }
 
 .navbar-nav .nav-link {
-  color: #555;
+  color: #201e1e;
   margin: 0 10px;
   font-size: 1.2rem;
   font-weight: 530;
@@ -39,14 +39,14 @@
 }
 
 .navbar-nav .nav-link:hover {
-  color: #007bff;
+  color: #ff000072;
   transform: translateY(-2px);
 }
 
 .navbar-nav .nav-link.active {
-  color: #0056b3;
+  color: #ff000090;
   font-weight: bold;
-  border-bottom: 2px solid #007bff;
+  border-bottom: 2px solid #ff000073;
 }
 
 .navbar-toggler {
@@ -64,13 +64,13 @@
 }
 
 .navbar-toggler-icon:hover {
-  background-color: #007bff;
+  background-color: #000000;
 }
 
 .navbar-toggler-icon::before,
 .navbar-toggler-icon::after {
   content: "";
-  background-color: #333;
+  background-color: #000000;
   width: 30px;
   height: 3px;
   display: block;
@@ -79,17 +79,25 @@
   transition: background-color 0.3s ease;
 }
 
-.navbar-toggler-icon:hover::before,
-.navbar-toggler-icon:hover::after {
-  background-color: #007bff;
-}
-
 .navbar-toggler-icon::before {
   top: -8px;
 }
 
 .navbar-toggler-icon::after {
   top: 8px;
+}
+
+.bt {
+  background-color: #ff00003f;
+  border-radius: 15px;
+  padding: 10px 15px;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.bt:hover {
+  background-color: #ff7c7c7f;
+  transform: translateY(-3px);
 }
 
 @media (max-width: 576px) {

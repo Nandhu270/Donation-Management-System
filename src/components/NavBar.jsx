@@ -5,7 +5,9 @@ import Navbar from "react-bootstrap/Navbar";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Link } from "react-router-dom";
 import logo from "../pics/logo.png";
-import '../css/NavBar.css'
+import "../css/NavBar.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
 
 function NavBar() {
   return (
@@ -33,14 +35,22 @@ function NavBar() {
             <Nav.Link as={Link} to="/blog">
               Blog
             </Nav.Link>
-            <Nav.Link as={Link} to="/donate">
-              Donate
-            </Nav.Link>
             <Nav.Link as={Link} to="/contactus">
               ContactUs
             </Nav.Link>
             <Nav.Link as={Link} to="/login">
               Login
+            </Nav.Link>
+            <Nav.Link
+              className="bt d-flex align-items-center justify-content-center"
+              as={Link}
+              to="/donate"
+            >
+              <span className="me-2">Donate</span>
+              <FontAwesomeIcon
+                icon={faHeart}
+                style={{ color: "red", fontSize: "1.2rem" }}
+              />
             </Nav.Link>
           </Nav>
         </Navbar.Collapse>
