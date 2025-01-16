@@ -1,3 +1,4 @@
+/* Existing styles */
 .head {
   max-width: 40vw;
   margin: 0 auto;
@@ -27,22 +28,21 @@
   gap: 20px;
 }
 
-
-.instagram-con{
+.instagram-con {
   color: white;
   background: linear-gradient(45deg, #fd1d1d, #fcb045, #e4405f, #833ab4);
   border-radius: 12px;
 }
 
-.facebook-con{
+.facebook-con {
   color: rgb(96, 96, 250);
 }
 
-.linkedin-con{
+.linkedin-con {
   color: rgb(56, 56, 243);
 }
 
-.twitter-con{
+.twitter-con {
   color: rgb(39, 187, 245);
 }
 
@@ -54,6 +54,18 @@
   transform: scale(1.1);
 }
 
+/* Form control hover effect */
+.form-control:hover {
+  border-color: #ff9800; /* Change border color on hover */
+  box-shadow: 0 0 5px rgba(255, 152, 0, 0.6); /* Add a glowing effect */
+}
+
+.form-control:focus {
+  border-color: #ff5722; /* Focus border color */
+  box-shadow: 0 0 5px rgba(255, 87, 34, 0.6); /* Focus glow effect */
+}
+
+/* Responsive styles */
 @media (max-width: 768px) {
   .head {
     font-size: 1.5rem;
@@ -79,7 +91,8 @@
     font-size: 1.3rem;
   }
 
-  .topic1, .topic2 {
+  .topic1,
+  .topic2 {
     padding: 20px;
   }
 
@@ -117,7 +130,8 @@
     font-size: 1.1rem;
   }
 
-  .topic1, .topic2 {
+  .topic1,
+  .topic2 {
     padding: 15px;
   }
 
@@ -155,7 +169,8 @@
     font-size: 1rem;
   }
 
-  .topic1, .topic2 {
+  .topic1,
+  .topic2 {
     padding: 10px;
   }
 
@@ -165,5 +180,44 @@
 
   .btn {
     font-size: 12px;
+  }
+}
+
+@media (max-width: 380px) {
+  .head {
+    font-size: 1rem;
+    max-width: 95%;
+  }
+
+  .heading {
+    max-width: 90vw;
+    font-size: 1rem;
+  }
+
+  .topic1 p {
+    font-size: 10px;
+  }
+
+  .links-con {
+    justify-content: center;
+    gap: 5px;
+    flex-direction: column;
+  }
+
+  .social-icon {
+    font-size: 0.9rem;
+  }
+
+  .topic1,
+  .topic2 {
+    padding: 8px;
+  }
+
+  .form-control {
+    font-size: 10px;
+  }
+
+  .btn {
+    font-size: 10px;
   }
 }

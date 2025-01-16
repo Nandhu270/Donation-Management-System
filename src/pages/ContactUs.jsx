@@ -41,28 +41,28 @@ export default function ContactUs() {
           <Form className="mt-4">
             <Form.Group className="mb-3">
               <Form.Label>Name</Form.Label>
-              <Col xs={12} sm={11} md={9}>
+              <Col xs={12} sm={11} md={11}>
                 <Form.Control type="text" placeholder="Enter Your Name" />
               </Col>
             </Form.Group>
 
             <Form.Group className="mb-3">
               <Form.Label>Email Address</Form.Label>
-              <Col xs={12} sm={11} md={9}>
+              <Col xs={12} sm={11} md={11}>
                 <Form.Control type="email" placeholder="name@example.com" />
               </Col>
             </Form.Group>
 
             <Form.Group className="mb-3">
               <Form.Label>Subject</Form.Label>
-              <Col xs={12} sm={11} md={9}>
+              <Col xs={12} sm={11} md={11}>
                 <Form.Control type="text" />
               </Col>
             </Form.Group>
 
             <Form.Group className="mb-3">
               <Form.Label>Your Message</Form.Label>
-              <Col xs={12} sm={11} md={9}>
+              <Col xs={12} sm={11} md={11}>
                 <Form.Control as="textarea" rows={3} />
               </Col>
             </Form.Group>

@@ -1,8 +1,8 @@
-import React from 'react';
+import React from "react";
 export default function Donate() {
   return (
     <>
-    <h1>Donate</h1>
+      <h1>Donate</h1>
     </>
   );
 }

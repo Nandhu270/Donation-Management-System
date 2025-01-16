@@ -2,7 +2,7 @@ import React from "react";
 import "../css/About.css";
 import { Container } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import '../css/About.css'
+import "../css/About.css";
 
 export default function About() {
   return (
@@ -77,7 +77,10 @@ export default function About() {
           managing donor profiles.
         </p>
       </Container>
-      <Container fluid className="mt-4 d-flex align-items-center justify-content-center">
+      <Container
+        fluid
+        className="mt-4 d-flex align-items-center justify-content-center"
+      >
         <div className="video-wrapper">
           <iframe
             src="https://www.youtube.com/embed/lhucarMcm_U?si=v_iUShTEhQXgNQVE"

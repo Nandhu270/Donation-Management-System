@@ -44,16 +44,16 @@ function Footer() {
               newsletter!
             </p>
             <form className="newsletter-form">
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  required
-                  className="newsletter-input"
-                />
-                <button type="submit" className="newsletter-button">
-                  Subscribe
-                </button>
-                </form>
+              <input
+                type="email"
+                placeholder="Enter your email"
+                required
+                className="newsletter-input"
+              />
+              <button type="submit" className="newsletter-button">
+                Subscribe
+              </button>
+            </form>
           </div>
         </div>
         <div className="footer-bottom">

@@ -43,16 +43,16 @@ function NavBar() {
             </Nav.Link>
           </Nav>
           <Nav.Link
-              className="bt d-flex align-items-center justify-content-center"
-              as={Link}
-              to="/donate"
-            >
-              <span className="me-2">Donate</span>
-              <FontAwesomeIcon
-                icon={faHeart}
-                style={{ color: "red", fontSize: "1.2rem" }}
-              />
-            </Nav.Link>
+            className="bt d-flex align-items-center justify-content-center"
+            as={Link}
+            to="/donate"
+          >
+            <span className="me-2">Donate</span>
+            <FontAwesomeIcon
+              icon={faHeart}
+              style={{ color: "red", fontSize: "1.2rem" }}
+            />
+          </Nav.Link>
         </Navbar.Collapse>
       </Container>
     </Navbar>

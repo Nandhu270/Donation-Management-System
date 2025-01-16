@@ -4,9 +4,9 @@ import Home from "../pages/Home";
 import Blog from "../pages/Blog";
 import ContactUs from "../pages/ContactUs";
 import Donate from "../pages/Donate";
-import Login from "../pages/login";
+import Login from "../pages/Login";
 import About from "../pages/About";
-import NavBar from "./Navbar";
+import NavBar from "./NavBar";
 import Footer from "./Footer";
 
 function HomePage() {
