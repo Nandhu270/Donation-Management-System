@@ -13,7 +13,7 @@ function NavBar() {
   return (
     <Navbar bg="light" data-bs-theme="light" expand="sm">
       <Container>
-        <Navbar.Brand>
+        <Navbar.Brand as={Link} to="/">
           {" "}
           <img
             alt="a"
@@ -41,7 +41,8 @@ function NavBar() {
             <Nav.Link as={Link} to="/login">
               Login
             </Nav.Link>
-            <Nav.Link
+          </Nav>
+          <Nav.Link
               className="bt d-flex align-items-center justify-content-center"
               as={Link}
               to="/donate"
@@ -52,7 +53,6 @@ function NavBar() {
                 style={{ color: "red", fontSize: "1.2rem" }}
               />
             </Nav.Link>
-          </Nav>
         </Navbar.Collapse>
       </Container>
     </Navbar>

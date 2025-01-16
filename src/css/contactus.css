@@ -1,14 +1,169 @@
 .head {
-    max-width: 40vw;
-    margin: 0 auto;
-    padding-bottom: 10px;
-    text-align: center;
-    color: #d32f2f;
-    border-bottom: 3px solid #ff9800;
-    font-weight: bold;
-    font-size: 1.8rem;
+  max-width: 40vw;
+  margin: 0 auto;
+  padding-bottom: 10px;
+  text-align: center;
+  color: #d32f2f;
+  border-bottom: 3px solid #ff9800;
+  font-weight: bold;
+  font-size: 1.8rem;
+}
+.heading {
+  margin: 0;
+  color: #d32f2f;
+  border-bottom: 3px solid #ff9800;
+  max-width: 15vw;
+}
+
+.topic1 p {
+  font-weight: 500;
+  font-style: italic;
+  font-size: 20px;
+}
+
+.links-con {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+
+.instagram-con{
+  color: white;
+  background: linear-gradient(45deg, #fd1d1d, #fcb045, #e4405f, #833ab4);
+  border-radius: 12px;
+}
+
+.facebook-con{
+  color: rgb(96, 96, 250);
+}
+
+.linkedin-con{
+  color: rgb(56, 56, 243);
+}
+
+.twitter-con{
+  color: rgb(39, 187, 245);
+}
+
+.social-icon {
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.social-icon:hover {
+  transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+  .head {
+    font-size: 1.5rem;
+    max-width: 90%;
   }
 
-  .cont{
-   color: red;
+  .heading {
+    max-width: 45vw;
+    font-size: 1.3rem;
   }
+
+  .topic1 p {
+    font-size: 16px;
+    text-align: center;
+  }
+
+  .links-con {
+    justify-content: center;
+    gap: 15px;
+  }
+
+  .social-icon {
+    font-size: 1.3rem;
+  }
+
+  .topic1, .topic2 {
+    padding: 20px;
+  }
+
+  .form-control {
+    font-size: 14px;
+  }
+
+  .btn {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 576px) {
+  .head {
+    font-size: 1.3rem;
+    max-width: 95%;
+  }
+
+  .heading {
+    max-width: 60vw;
+    font-size: 1.2rem;
+  }
+
+  .topic1 p {
+    font-size: 14px;
+  }
+
+  .links-con {
+    justify-content: center;
+    gap: 10px;
+    flex-direction: column;
+  }
+
+  .social-icon {
+    font-size: 1.1rem;
+  }
+
+  .topic1, .topic2 {
+    padding: 15px;
+  }
+
+  .form-control {
+    font-size: 14px;
+  }
+
+  .btn {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 400px) {
+  .head {
+    font-size: 1.2rem;
+    max-width: 95%;
+  }
+
+  .heading {
+    max-width: 80vw;
+    font-size: 1.1rem;
+  }
+
+  .topic1 p {
+    font-size: 12px;
+  }
+
+  .links-con {
+    justify-content: center;
+    gap: 8px;
+    flex-direction: column;
+  }
+
+  .social-icon {
+    font-size: 1rem;
+  }
+
+  .topic1, .topic2 {
+    padding: 10px;
+  }
+
+  .form-control {
+    font-size: 12px;
+  }
+
+  .btn {
+    font-size: 12px;
+  }
+}
