@@ -16,12 +16,12 @@ export default function ContactUs() {
       >
         <h2>Get In Touch With Us</h2>
       </Container>
-      <Container fluid className="mt-4 d-flex">
-        <Container className="topic1">
+      <Container fluid className="mt-4 d-flex topics-container">
+        <Container fluid className="topic1">
           <Container className="heading">
             <h2>General Info</h2>
           </Container>
-          <Container className="mt-4">
+          <Container className="mt-4 para-con">
             <p>Email:</p>
             <p style={{ color: "red" }}>admin@donatefeedback.in</p>
             <p>Phone:</p>
@@ -34,7 +34,7 @@ export default function ContactUs() {
             <FaLinkedin size={30} className="social-icon linkedin-con" />
           </div>
         </Container>
-        <Container className="topic2">
+        <Container fluid className="topic2">
           <Container className="heading">
             <h2>Contact Us</h2>
           </Container>
@@ -66,7 +66,7 @@ export default function ContactUs() {
                 <Form.Control as="textarea" rows={3} />
               </Col>
             </Form.Group>
-            <Button variant="outline-danger">Send</Button>
+            <Button type="submit" variant="outline-danger">Send</Button>
           </Form>
         </Container>
       </Container>

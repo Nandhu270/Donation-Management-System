@@ -2,8 +2,10 @@ import React from "react";
 import { Container } from "react-bootstrap";
 import "../css/Footer.css";
 import { FaFacebook, FaLinkedin, FaTwitter, FaInstagram } from "react-icons/fa";
+import { useNavigate,Link } from "react-router-dom";
 
 function Footer() {
+  const navigate = useNavigate();
   return (
     <footer className="footer">
       <Container className="footer-content">
@@ -15,14 +17,21 @@ function Footer() {
               world where every child has a happy childhood that sets them up
               for a positive future.
             </p>
+            <button
+              type="submit"
+              className="newsletter-button"
+              onClick={() => navigate("/donate")}
+            >
+              Donate
+            </button>
           </div>
           <div className="use">
             <h1>Useful Links</h1>
-            <a href="#">About Us</a>
-            <a href="#">FAQ</a>
-            <a href="#">Do Charity</a>
-            <a href="#">My Account</a>
-            <a href="#">Contact Us</a>
+            <Link to="/about">About Us</Link>
+            <Link to="/blog">FAQ</Link>
+            <Link to="/donate">Do Charity</Link>
+            <Link to="/login">My Account</Link>
+            <Link to="/contactus">Contact Us</Link>
           </div>
           <div>
             <h1>Follow Us</h1>

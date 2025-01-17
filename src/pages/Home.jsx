@@ -3,8 +3,10 @@ import { Container } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "react-bootstrap/Button";
 import "../css/Home.css";
+import {useNavigate} from 'react-router-dom';
 
 export default function Home() {
+  const navigate = useNavigate();
   return (
     <>
       <Container
@@ -15,7 +17,7 @@ export default function Home() {
           <h1>Join the Life-Saving Cause</h1>
           <p>Be a Hero, Donate Something Today that you Can!...</p>
           <div className="button-content">
-            <Button variant="outline-info">Join as a Donor</Button>
+            <Button variant="outline-info" onClick={()=>navigate('/signup')}>Join as a Donor</Button>
             <Button variant="outline-info">Search Donor</Button>
           </div>
         </div>

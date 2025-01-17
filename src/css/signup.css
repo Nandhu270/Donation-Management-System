@@ -1,0 +1,63 @@
+.head-sig {
+  max-width: 35vw;
+  color: #d32f2f;
+  border-bottom: 3px solid #ff9800;
+}
+
+.signup-container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.signup-form {
+  background: whitesmoke;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.signup-label {
+  font-size: 0.9rem;
+  color: #403c3c;
+}
+
+.signup-input {
+  font-size: 0.9rem;
+  padding: 5px;
+}
+
+.signup-radio {
+  font-size: 0.9rem;
+}
+
+.bt-sig {
+  width: 40%;
+  max-width: 100px;
+  font-size: 0.85rem;
+  padding: 7px 10px;
+  font-weight: bold;
+  border-radius: 4px;
+  background-color: transparent;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+input[type="radio"]:hover,
+.form-select:hover {
+  border-color: #ff9800;
+  box-shadow: 0 0 5px rgba(255, 152, 0, 0.6);
+}
+
+input[type="radio"]:focus,
+.form-select:focus {
+  border-color: #ff5722;
+  box-shadow: 0 0 5px rgba(255, 87, 34, 0.6);
+}
+
+input[type="radio"]:checked {
+  background-color: #ff9800;
+  border-color: #ff9800;
+}
+
+input[type="radio"]:checked:after {
+  background-color: #fff;
+}
