@@ -1,0 +1,84 @@
+.search-donor-container {
+  font-family: Arial, sans-serif;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.search-donor-heading {
+  text-align: center;
+  font-size: 2rem;
+  color: red;
+  margin-bottom: 20px;
+  border-bottom: 3px solid orange;
+  padding-bottom: 10px;
+}
+
+.search-donor-form {
+  padding: 10px;
+}
+
+.form-group-custom {
+  margin-bottom: 20px;
+}
+
+.form-label-custom {
+  font-weight: 400;
+  color: #333;
+}
+
+.form-control-custom {
+  font-size: 1rem;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #fff;
+}
+
+.button-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.send-button {
+  font-size: 1rem;
+  padding: 10px 20px;
+  color: red;
+  border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+  .search-donor-container {
+    padding: 10px;
+  }
+
+  .search-donor-heading {
+    font-size: 1.8rem;
+  }
+
+  .form-control-custom {
+    font-size: 0.9rem;
+  }
+
+  .send-button {
+    font-size: 0.9rem;
+    padding: 8px 16px;
+  }
+}
+
+@media (max-width: 576px) {
+  .search-donor-heading {
+    font-size: 1.6rem;
+  }
+
+  .form-control-custom {
+    font-size: 0.8rem;
+  }
+
+  .send-button {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+}

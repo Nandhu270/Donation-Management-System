@@ -8,6 +8,7 @@ import logo from "../pics/logo.png";
 import "../css/NavBar.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import ScrollToTop from "./ScrollTop";
 
 function NavBar() {
   return (
@@ -21,6 +22,7 @@ function NavBar() {
             width="50"
             height="50"
             className="d-inline-block align-top"
+            onClick={ScrollToTop}
           />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />

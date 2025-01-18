@@ -11,10 +11,13 @@ import Footer from "./Footer";
 import SignUp from "../pages/SignUp";
 import Blood from "../pages/Blood";
 import Process from "../pages/Process";
+import ScrollToTop from "./ScrollTop";
+import SearchDonor from "../pages/searchdonor";
 
 function HomePage() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <NavBar />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -26,6 +29,7 @@ function HomePage() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/Blood" element={<Blood />} />
         <Route path="/process" element={<Process />} />
+        <Route path="/searchdonor" element={<SearchDonor />} />
       </Routes>
       <Footer />
     </BrowserRouter>

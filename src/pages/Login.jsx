@@ -24,7 +24,8 @@ export default function Login() {
                   Manage Your Donations and Recurring Plans
                 </h3>
                 <p>
-                  View your donations, receipts, and manage your recurring plans with your favorite organizations.
+                  View your donations, receipts, and manage your recurring plans
+                  with your favorite organizations.
                 </p>
               </li>
               <li>
@@ -35,7 +36,8 @@ export default function Login() {
                   Quickly Donate to Your Favorite Organizations
                 </h3>
                 <p>
-                  You can donate to your favorite organizations without filling out the donation form. Giving has never been easier!
+                  You can donate to your favorite organizations without filling
+                  out the donation form. Giving has never been easier!
                 </p>
               </li>
             </ul>
@@ -47,23 +49,27 @@ export default function Login() {
               <Form.Group className="mb-3">
                 <Form.Label>Email Address</Form.Label>
                 <Col xs={12} sm={11} md={11}>
-                <Form.Control type="email" placeholder="name@example.com" />
+                  <Form.Control type="email" placeholder="name@example.com" />
                 </Col>
               </Form.Group>
 
               <Form.Group className="mb-3">
                 <Form.Label>Password</Form.Label>
                 <Col xs={12} sm={11} md={11}>
-                <Form.Control type="password" placeholder="Password" />
+                  <Form.Control type="password" placeholder="Password" />
                 </Col>
               </Form.Group>
 
               <Form.Check type="checkbox" label="Remember Me" />
-              <Button type="submit" variant="outline-danger mt-2 bt-log">Login</Button>
+              <Button type="submit" variant="outline-danger mt-2 bt-log">
+                Login
+              </Button>
               <p className="mt-2">
                 Not Registered Yet?{" "}
                 <span>
-                  <Link to="/signup" className="link-log">Create an Account</Link>
+                  <Link to="/signup" className="link-log">
+                    Create an Account
+                  </Link>
                 </span>
               </p>
             </Form>
@@ -71,9 +77,14 @@ export default function Login() {
         </Row>
       </Container>
 
-      <Container fluid className="d-flex align-items-center justify-content-center con-fot text-center">
+      <Container
+        fluid
+        className="d-flex align-items-center justify-content-center con-fot text-center"
+      >
         <h4>
-          Like you, over a million people have donated to support 50,000+ nonprofit causes around the world. Thank you for your help in making our world a better place.
+          Like you, over a million people have donated to support 50,000+
+          nonprofit causes around the world. Thank you for your help in making
+          our world a better place.
         </h4>
       </Container>
     </>

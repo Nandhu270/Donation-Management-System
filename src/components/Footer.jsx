@@ -2,7 +2,8 @@ import React from "react";
 import { Container } from "react-bootstrap";
 import "../css/Footer.css";
 import { FaFacebook, FaLinkedin, FaTwitter, FaInstagram } from "react-icons/fa";
-import { useNavigate,Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import ScrollToTop from "./ScrollTop";
 
 function Footer() {
   const navigate = useNavigate();
@@ -27,11 +28,21 @@ function Footer() {
           </div>
           <div className="use">
             <h1>Useful Links</h1>
-            <Link to="/about">About Us</Link>
-            <Link to="/blog">FAQ</Link>
-            <Link to="/donate">Do Charity</Link>
-            <Link to="/login">My Account</Link>
-            <Link to="/contactus">Contact Us</Link>
+            <Link to="/about" onClick={ScrollToTop}>
+              About Us
+            </Link>
+            <Link to="/blog" onClick={ScrollToTop}>
+              FAQ
+            </Link>
+            <Link to="/donate" onClick={ScrollToTop}>
+              Do Charity
+            </Link>
+            <Link to="/login" onClick={ScrollToTop}>
+              My Account
+            </Link>
+            <Link to="/contactus" onClick={ScrollToTop}>
+              Contact Us
+            </Link>
           </div>
           <div>
             <h1>Follow Us</h1>

@@ -1,0 +1,130 @@
+.blood-page {
+  color: #333;
+  line-height: 1.6;
+}
+
+.content-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.main-heading {
+  font-size: 2.5rem;
+  color: red;
+  text-align: center;
+  border-bottom: 3px solid orange;
+  margin-bottom: 20px;
+}
+
+.intro-paragraph {
+  font-size: 1.2rem;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.main-image {
+  display: block;
+  margin: 20px auto;
+  border-radius: 10px;
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+}
+
+.section-heading {
+  font-size: 1.8rem;
+  color: #e63946;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  border-left: 5px solid orange;
+  padding-left: 10px;
+}
+
+.benefits-list,
+.eligibility-list {
+  list-style: disc;
+  margin: 0 20px 30px;
+}
+
+.benefits-list li,
+.eligibility-list li {
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+.myths-facts-section {
+  margin: 20px 0;
+}
+
+.myth-box,
+.fact-box {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.myth-title {
+  color: #e63946;
+  font-size: 1.2rem;
+}
+
+.fact-title {
+  color: #4caf50;
+  font-size: 1.2rem;
+}
+
+.cta-section {
+  text-align: center;
+  margin: 30px 0;
+  padding: 30px;
+  background-color: #e63946;
+  color: white;
+  border-radius: 10px;
+}
+
+.cta-heading {
+  font-size: 1.8rem;
+}
+
+.cta-text {
+  font-size: 1rem;
+  margin-bottom: 20px;
+}
+
+.cta-button {
+  background-color: white;
+  color: #e63946;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cta-button:hover {
+  background-color: orange;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .main-heading {
+    font-size: 2rem;
+  }
+
+  .section-heading {
+    font-size: 1.5rem;
+  }
+
+  .benefits-list li,
+  .eligibility-list li {
+    font-size: 0.9rem;
+  }
+
+  .cta-heading {
+    font-size: 1.5rem;
+  }
+}

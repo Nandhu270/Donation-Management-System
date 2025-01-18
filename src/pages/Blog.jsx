@@ -4,7 +4,7 @@ import { Container, Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeartbeat } from "@fortawesome/free-solid-svg-icons";
 import { DropletFill } from "react-bootstrap-icons";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function Blog() {
   const navigate = useNavigate();
@@ -28,7 +28,11 @@ export default function Blog() {
               about the benefits and the impact you can make while donating
               blood.
             </p>
-            <Button variant="outline-danger" className="blog-button" onClick={()=>navigate('/blood')}>
+            <Button
+              variant="outline-danger"
+              className="blog-button"
+              onClick={() => navigate("/blood")}
+            >
               Learn More
             </Button>
           </Container>
@@ -39,7 +43,11 @@ export default function Blog() {
               Find out how you can donate blood and become a hero. Follow these
               simple steps to get started to how to donate blood.
             </p>
-            <Button variant="outline-danger" className="blog-button" onClick={()=>navigate('/process')}>
+            <Button
+              variant="outline-danger"
+              className="blog-button"
+              onClick={() => navigate("/process")}
+            >
               Learn More
             </Button>
           </Container>

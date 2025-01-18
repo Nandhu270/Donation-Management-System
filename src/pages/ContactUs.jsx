@@ -66,7 +66,9 @@ export default function ContactUs() {
                 <Form.Control as="textarea" rows={3} />
               </Col>
             </Form.Group>
-            <Button type="submit" variant="outline-danger">Send</Button>
+            <Button type="submit" variant="outline-danger">
+              Send
+            </Button>
           </Form>
         </Container>
       </Container>
