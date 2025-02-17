@@ -1,14 +1,26 @@
-import React from "react";
+import React, { useEffect,useState } from "react";
 import { Container } from "react-bootstrap";
 import "../css/Footer.css";
-import { FaFacebook, FaLinkedin, FaTwitter, FaInstagram } from "react-icons/fa";
-import { useNavigate, Link } from "react-router-dom";
+import { FaFacebook, FaLinkedin,FaTwitter, FaInstagram, FaChevronRight } from "react-icons/fa";
+import { useNavigate, Link,useLocation  } from "react-router-dom";
 import ScrollToTop from "./ScrollTop";
 
 function Footer() {
   const navigate = useNavigate();
+
+  const location = useLocation(); 
+  const [animate, setAnimate] = useState(false);
+
+  useEffect(() => {
+    setAnimate(false);
+    setTimeout(() => {
+      setAnimate(true); 
+    }, 10); 
+  }, [location.pathname]);  
+
+
   return (
-    <footer className="footer">
+    <footer className={`footer ${animate ? "animate__animated animate__fadeIn" : ""}`}>
       <Container className="footer-content">
         <div className="box">
           <div>
@@ -29,19 +41,19 @@ function Footer() {
           <div className="use">
             <h1>Useful Links</h1>
             <Link to="/about" onClick={ScrollToTop}>
-              About Us
+            <FaChevronRight /> About Us
             </Link>
             <Link to="/blog" onClick={ScrollToTop}>
-              FAQ
+            <FaChevronRight /> Blog
             </Link>
             <Link to="/donate" onClick={ScrollToTop}>
-              Do Charity
+            <FaChevronRight /> Do Charity
             </Link>
             <Link to="/login" onClick={ScrollToTop}>
-              My Account
+            <FaChevronRight /> My Account
             </Link>
             <Link to="/contactus" onClick={ScrollToTop}>
-              Contact Us
+            <FaChevronRight /> Contact Us
             </Link>
           </div>
           <div>
@@ -53,7 +65,7 @@ function Footer() {
             <div className="links">
               <FaFacebook size={30} className="social-icon facebook" />
               <FaInstagram size={30} className="social-icon instagram" />
-              <FaTwitter size={30} className="social-icon twitter" />
+              <FaTwitter  size={30} className="social-icon twitter" />
               <FaLinkedin size={30} className="social-icon linkedin" />
             </div>
           </div>

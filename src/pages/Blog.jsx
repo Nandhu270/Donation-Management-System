@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function Blog() {
   const navigate = useNavigate();
+  
   return (
     <>
       <Container className="blog-container">
@@ -31,13 +32,13 @@ export default function Blog() {
             <Button
               variant="outline-danger"
               className="blog-button"
-              onClick={() => navigate("/blood")}
+              onClick={() => navigate("/blog/blood")}
             >
               Learn More
             </Button>
           </Container>
           <Container fluid className="blog-section">
-            <DropletFill color="red" size={48} />
+            <DropletFill color="red" size={47} />
             <h1 className="blog-subtitle">How to Donate?</h1>
             <p className="blog-text">
               Find out how you can donate blood and become a hero. Follow these
@@ -46,7 +47,7 @@ export default function Blog() {
             <Button
               variant="outline-danger"
               className="blog-button"
-              onClick={() => navigate("/process")}
+              onClick={() => navigate("/blog/process")}
             >
               Learn More
             </Button>

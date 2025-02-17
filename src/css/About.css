@@ -72,6 +72,11 @@
   border: none;
 }
 
+.animate__animated.animate__fadeIn {
+  --animate-duration: 2s;
+  opacity: 1;
+}
+
 @media (max-width: 768px) {
   .help,
   .blood {

@@ -9,12 +9,14 @@
   font-size: 2rem;
   color: #d32f2f;
   margin-bottom: 10px;
+  animation: 1s ease-in-out fade-con;
 }
 
 .blog-intro {
   font-size: 1rem;
   color: #555;
   margin-bottom: 30px;
+  animation: 1s ease-in-out fade-con;
 }
 
 .blog-section {
@@ -26,6 +28,7 @@
   border-radius: 8px;
   background-color: #f9f9f9;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  animation: 1.5s ease-in-out fade-con;
 }
 
 .blog-subtitle {
@@ -44,6 +47,17 @@
   font-size: 0.9rem;
   padding: 8px 15px;
   border-radius: 5px;
+}
+
+@keyframes fade-con {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (max-width: 768px) {
@@ -102,3 +116,4 @@
     padding: 5px 10px;
   }
 }
+

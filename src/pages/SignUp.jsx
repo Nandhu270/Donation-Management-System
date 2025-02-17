@@ -5,7 +5,7 @@ import "../css/signup.css";
 
 function SignUp() {
   return (
-    <Container className="signup-container my-4">
+    <Container className="signup-container my-4 animate__animated animate__fadeIn">
       <Form className="signup-form shadow-sm p-3 rounded">
         <h2 className="text-center mb-3 head-sig">Registration Form</h2>
 
@@ -32,14 +32,18 @@ function SignUp() {
           </Col>
         </Row>
 
-        <Form.Group className="mb-2">
-          <Form.Label className="signup-label">Email Address</Form.Label>
-          <Form.Control
-            type="email"
-            placeholder="Enter email Address"
-            className="signup-input"
-          />
-        </Form.Group>
+        <Row>
+          <Col md={12}>
+            <Form.Group className="mb-2">
+              <Form.Label className="signup-label">Email Address</Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="Enter email Address"
+                className="signup-input"
+              />
+            </Form.Group>
+          </Col>
+        </Row>
 
         <Row className="mb-2">
           <Col md={6}>

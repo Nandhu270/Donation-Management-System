@@ -5,7 +5,7 @@ import { Container, Form, Col, Button } from "react-bootstrap";
 function SearchDonor() {
   return (
     <>
-      <Container fluid className="search-donor-container mt-4">
+      <Container fluid className="search-donor-container mt-4 animate__animated animate__fadeIn">
         <h1 className="search-donor-heading">Search Donor</h1>
         <Form className="search-donor-form">
           <Form.Group className="form-group-custom">

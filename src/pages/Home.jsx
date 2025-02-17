@@ -1,36 +1,85 @@
-import React from "react";
-import { Container } from "react-bootstrap";
+import React,{useEffect} from "react";
+import { Container, Button, Carousel,Row,Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Button from "react-bootstrap/Button";
 import "../css/Home.css";
 import { useNavigate } from "react-router-dom";
 
 export default function Home() {
   const navigate = useNavigate();
+  const backgroundImages = [
+    "https://images.unsplash.com/photo-1542810634-71277d95dcbb?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "https://images.unsplash.com/photo-1608342381036-15657da6bf58?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "https://i.pinimg.com/736x/72/14/21/7214211d5a47a0e7fcd23182a192e9c6.jpg",
+    "https://images.unsplash.com/photo-1589104760192-ccab0ce0d90f?q=80&w=2067&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  ];
+
+
+  const handleScroll = () => {
+    const elements = document.querySelectorAll(".fade-in");
+    elements.forEach((el) => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom >= 0) {
+        if (!el.classList.contains("show")) {
+          el.classList.add("show");
+        }
+      } else {
+        if (el.classList.contains("show")) {
+          el.classList.remove("show");
+        }
+      }
+    });
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <>
-      <Container
-        fluid
-        className="background-container mt-3 text-center d-flex align-items-center justify-content-center"
-      >
-        <div className="content">
-          <h1>Join the Life-Saving Cause</h1>
-          <p>Be a Hero, Donate Something Today that you Can!...</p>
-          <div className="button-content">
-            <Button variant="outline-info" onClick={() => navigate("/signup")}>
-              Join as a Donor
-            </Button>
-            <Button
-              variant="outline-info"
-              onClick={() => navigate("/searchdonor")}
-            >
-              Search Donor
-            </Button>
-          </div>
-        </div>
+      <Container fluid className="carousel-container fade-in">
+        <Carousel fade>
+          {backgroundImages.map((img, idx) => (
+            <Carousel.Item key={idx} interval={1500} pause="hover">
+              <Container
+                fluid
+                className="carousel-bg"
+                style={{ backgroundImage: `url(${img})` }}
+              >
+                <Row className="overlay align-items-center justify-content-center text-center">
+                  <Col>
+                    <h1 className="text-light">Join the Life-Saving Cause</h1>
+                    <p className="text-light">Be a Hero, Donate Something Today that you Can!...</p>
+                    <div className="button-content">
+                      <Button
+                        variant="outline-light"
+                        className="home-btn"
+                        onClick={() => navigate("/signup")}
+                      >
+                        Join as a Donor
+                      </Button>
+                      <Button
+                        variant="outline-light"
+                        className="home-btn"
+                        onClick={() => navigate("/searchdonor")}
+                      >
+                        Search Donor
+                      </Button>
+                    </div>
+                  </Col>
+                </Row>
+              </Container>
+            </Carousel.Item>
+          ))}
+        </Carousel>
       </Container>
+
       <Container fluid className="content-container mt-3 ">
-        <div>
+        <div className="fade-in">
           <h1>Help End Homelessness</h1>
           <p>
             Support Veterans, Domestic Violence Victims, and Foster Care Youth
@@ -44,7 +93,7 @@ export default function Home() {
         </div>
       </Container>
       <Container fluid className="content-container mt-3 ">
-        <div>
+        <div className="fade-in">
           <h1>Our Vision</h1>
           <p>
             We believe in empowering individuals to rebuild their lives, thrive,
@@ -56,7 +105,7 @@ export default function Home() {
         </div>
       </Container>
       <Container fluid className="content-container mt-3 ">
-        <div>
+        <div className="fade-in">
           <h1>Why Your Support Matters</h1>
           <p>Your donation will directly impact lives by funding:</p>
           <ul>
@@ -76,7 +125,7 @@ export default function Home() {
         </div>
       </Container>
       <Container fluid className="content-container mt-3 ">
-        <div>
+        <div className="fade-in">
           <h1>Our GOAL</h1>
           <p>
             With your help, we can raise $600,000 to secure these housing units
@@ -87,7 +136,7 @@ export default function Home() {
         </div>
       </Container>
       <Container fluid className="content-container mt-3 ">
-        <div>
+        <div className="fade-in">
           <h1>How You Can Help</h1>
           <p>
             Every donation brings us closer to ending homelessness. No amount is
@@ -97,7 +146,7 @@ export default function Home() {
         </div>
       </Container>
       <Container fluid className="content-container mt-3 ">
-        <div>
+        <div className="fade-in">
           <h1>Donate Today and Give the Gift of Hope</h1>
           <p>
             By contributing to this campaign, you are making a direct impact on
@@ -114,9 +163,9 @@ export default function Home() {
       </Container>
       <Container
         fluid
-        className="mt-4 d-flex align-items-center justify-content-center"
+        className="mt-4 d-flex align-items-center justify-content-center fade-in"
       >
-        <div className="video-wrapper">
+        <div className="video-wrapper fade-in">
           <iframe
             width="800"
             height="450"

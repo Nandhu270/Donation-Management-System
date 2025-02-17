@@ -1,16 +1,46 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Link } from "react-router-dom";
-import logo from "../pics/logo.png";
+import { Link, useLocation } from "react-router-dom";
+import logo from "../assets/logo.png";
 import "../css/NavBar.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import ScrollToTop from "./ScrollTop";
+import { login } from "./loginfile";
+import { FaUserCircle } from "react-icons/fa";
 
 function NavBar() {
+  const[page,setpage] = useState("");
+  const[isloggedIn, setloggedIn] = useState(false);
+  const[userlogin,setuserlogin] = useState({username: "",name:"", password:""});
+  const loc = useLocation();
+
+  useEffect(()=>{
+    if(userlogin.username=="" && userlogin.password=="" && userlogin.name==""){
+      if(login.username !=="" && login.password!=="" && login.name!==""){
+        setuserlogin(
+          userlogin.username=login.username,
+          userlogin.name=login.name,
+          userlogin.password=login.password
+        )
+        setloggedIn(true);
+      }else{
+        setloggedIn(false);
+      }
+    }
+  },[login.username,login.name,login.password])
+
+  useEffect(()=>{
+    setpage(loc.pathname);
+  },[loc.pathname])
+
+  useEffect(()=>{
+    setloggedIn(login.name!=="")
+  })
+
   return (
     <Navbar bg="light" data-bs-theme="light" expand="sm">
       <Container>
@@ -23,29 +53,29 @@ function NavBar() {
             height="50"
             className="d-inline-block align-top"
             onClick={ScrollToTop}
-          />
+          /> 
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
-            <Nav.Link as={Link} to="/">
+            <Nav.Link as={Link} to="/" onClick={()=>setpage("/")} className={page==="/"?"active":""}>
               Home
             </Nav.Link>
-            <Nav.Link as={Link} to="/about">
+            <Nav.Link as={Link} to="/about" onClick={()=>setpage("/about")} className={page==="/about"?"active":""}>
               About
             </Nav.Link>
-            <Nav.Link as={Link} to="/blog">
+            <Nav.Link as={Link} to="/blog" onClick={()=>setpage("/blog")} className={page==="/blog"?"active":""}>
               Blog
             </Nav.Link>
-            <Nav.Link as={Link} to="/contactus">
-              ContactUs
+            <Nav.Link as={Link} to="/contactus" onClick={()=>setpage("/contactus")} className={page==="/contactus"?"active":""}>
+              Contact 
             </Nav.Link>
-            <Nav.Link as={Link} to="/login">
-              Login
+            <Nav.Link as={Link} to="/login" onClick={()=>setpage("/login")} className={page==="/login"?"active":""}>
+              {isloggedIn?<><FaUserCircle size={33}/></>:'Login'}
             </Nav.Link>
           </Nav>
           <Nav.Link
-            className="bt d-flex align-items-center justify-content-center"
+            className="bt ms-2 d-flex align-items-center justify-content-center"
             as={Link}
             to="/donate"
           >

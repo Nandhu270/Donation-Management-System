@@ -1,4 +1,4 @@
-.con-login {
+   .con-login {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -114,6 +114,43 @@
   color: #f59b13;
 }
 
+
+.profile-card {
+  border-radius: 15px;
+  max-width: 700px;
+  width: 100%;
+  text-align: center;
+}
+
+.profile-img svg {
+  color: rgb(0, 0, 0);
+  border-radius: 50%;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.profile-title {
+  color: #d32f2f;
+  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+  font-weight: bold;
+}
+
+.profile-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+  color: #333;
+  padding: 8px 0;
+}
+
+.profile-icon {
+  color: white;
+  font-size: 1.3rem;
+  min-width: 30px;
+}
+
+
 @media (max-width: 576px) {
   .con-1 {
     flex-direction: column-reverse;
@@ -155,11 +192,25 @@
   .con-fot {
     font-size: 1rem;
   }
+
+  .profile-card {
+    padding: 20px;
+  }
+
+  .profile-item {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .profile-icon {
+    font-size: 1.5rem;
+  }
 }
 
 @media (max-width: 768px) {
   .con-1 {
-    flex-direction: column-reverse;
+    flex-direction: row;
     margin-top: 20px;
   }
 
@@ -184,4 +235,5 @@
     font-size: 0.85rem;
     padding: 8px 12px;
   }
+
 }

@@ -1,21 +1,48 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "../css/Donate.css";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/signup.css";
 
 export default function Donate() {
+  const handleScroll = () => {
+    const elements = document.querySelectorAll(".fade-in");
+    elements.forEach((el) => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom >= 0) {
+        if (!el.classList.contains("show")) {
+          el.classList.add("show");
+        }
+      } else {
+        if (el.classList.contains("show")) {
+          el.classList.remove("show");
+        }
+      }
+    });
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <>
       <Container
         fluid
-        className="mt-4 d-flex align-items-center justify-content-center head-don"
+        className="mt-4 d-flex align-items-center justify-content-center head-don animate__animated animate__fadeIn"
       >
         <h2>Donate</h2>
       </Container>
-      <Container className="signup-container my-4">
-        <Form className="signup-form shadow-sm p-3 rounded">
-          <Row className="mb-2">
+      <Container
+        className="signup-container my-4 animate__animated animate__fadeIn
+      "
+      >
+        <Form className="signup-form shadow-sm  p-3 rounded ">
+          <Row className="mb-2 animate__animated animate__fadeIn">
             <Col md={2}>
               <Form.Group>
                 <Form.Label className="signup-label">Currency</Form.Label>
@@ -57,16 +84,30 @@ export default function Donate() {
             </Col>
           </Row>
 
-          <Form.Group className="mb-2">
-            <Form.Label className="signup-label">Email Address</Form.Label>
-            <Form.Control
-              type="email"
-              placeholder="Enter email Address"
-              className="signup-input"
-            />
-          </Form.Group>
-
-          <Row className="mb-2">
+          <Row>
+            <Col md={6}>
+              <Form.Group className="mb-2">
+                <Form.Label className="signup-label">Email Address</Form.Label>
+                <Form.Control
+                  type="email"
+                  placeholder="Enter email Address"
+                  className="signup-input"
+                />
+              </Form.Group>
+            </Col>
+            <Col md={6}>
+              <Form.Group className="mb-2">
+                <Form.Label className="signup-label">UserName</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter User Name"
+                  className="signup-input"
+                />
+              </Form.Group>
+            </Col>
+          </Row>
+          
+          <Row className="mb-2 animate__animated animate__fadeIn">
             <Col md={6}>
               <Form.Group>
                 <Form.Label className="signup-label">Blood Group</Form.Label>
@@ -89,12 +130,12 @@ export default function Donate() {
             </Col>
           </Row>
 
-          <Form.Group className="mb-2">
+          <Form.Group className="mb-2 animate__animated animate__fadeIn">
             <Form.Label className="signup-label">Birth Date</Form.Label>
             <Form.Control type="date" className="signup-input" />
           </Form.Group>
 
-          <Form.Group className="mb-2">
+          <Form.Group className="mb-2 animate__animated animate__fadeIn">
             <Form.Label className="signup-label">Gender</Form.Label>
             <div className="d-flex">
               <Form.Check
@@ -121,7 +162,7 @@ export default function Donate() {
             </div>
           </Form.Group>
 
-          <Form.Group className="mb-2">
+          <Form.Group className="mb-2 animate__animated animate__fadeIn">
             <Form.Label className="signup-label">Address</Form.Label>
             <Form.Control
               as="textarea"
@@ -131,7 +172,7 @@ export default function Donate() {
             />
           </Form.Group>
 
-          <Row className="mb-2">
+          <Row className="mb-2 animate__animated animate__fadeIn">
             <Col md={6}>
               <Form.Group>
                 <Form.Label className="signup-label">Country</Form.Label>
@@ -169,9 +210,9 @@ export default function Donate() {
 
       <Container
         fluid
-        className="mt-4 d-flex justify-content-around donation-section-container"
+        className="mt-4 d-flex justify-content-around donation-section-container fade-in"
       >
-        <Container className="donation-section">
+        <Container className="donation-section fade-in">
           <h1>Donate Within India</h1>
           <p>
             <strong>Account Name:</strong> Donation Club
@@ -192,7 +233,7 @@ export default function Donate() {
             <strong>Bank Address:</strong> 15C, Chennai Mall Road, Chennai
           </p>
         </Container>
-        <Container className="donation-section">
+        <Container className="donation-section fade-in">
           <h1>Donate From Abroad</h1>
           <p>
             <strong>Account Name:</strong> Donation Club

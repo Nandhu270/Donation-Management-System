@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Container } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/contactus.css";
@@ -8,26 +8,27 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 
 export default function ContactUs() {
+
   return (
     <>
       <Container
         fluid
-        className="mt-4 d-flex align-items-center justify-content-center head"
+        className="mt-4 d-flex align-items-center justify-content-center head animate__animated animate__fadeIn"
       >
         <h2>Get In Touch With Us</h2>
       </Container>
       <Container fluid className="mt-4 d-flex topics-container">
         <Container fluid className="topic1">
-          <Container className="heading">
+          <Container className="heading animate__animated animate__fadeIn">
             <h2>General Info</h2>
           </Container>
-          <Container className="mt-4 para-con">
+          <Container className="mt-4 para-con animate__animated animate__fadeIn">
             <p>Email:</p>
             <p style={{ color: "red" }}>admin@donatefeedback.in</p>
             <p>Phone:</p>
             <p>985-452-964</p>
           </Container>
-          <div className="links-con">
+          <div className="links-con animate__animated animate__fadeIn">
             <FaFacebook size={30} className="social-icon facebook-con" />
             <FaInstagram size={30} className="social-icon instagram-con" />
             <FaTwitter size={30} className="social-icon twitter-con" />
@@ -35,35 +36,35 @@ export default function ContactUs() {
           </div>
         </Container>
         <Container fluid className="topic2">
-          <Container className="heading">
+          <Container className="heading animate__animated animate__fadeIn">
             <h2>Contact Us</h2>
           </Container>
-          <Form className="mt-4">
+          <Form className="mt-4 animate__animated animate__fadeIn" method="post">
             <Form.Group className="mb-3">
               <Form.Label>Name</Form.Label>
               <Col xs={12} sm={11} md={11}>
-                <Form.Control type="text" placeholder="Enter Your Name" />
+                <Form.Control type="text" placeholder="Enter Your Name" name="name" required/>
               </Col>
             </Form.Group>
 
             <Form.Group className="mb-3">
               <Form.Label>Email Address</Form.Label>
               <Col xs={12} sm={11} md={11}>
-                <Form.Control type="email" placeholder="name@example.com" />
+                <Form.Control type="email" placeholder="name@example.com" name="email" required/>
               </Col>
             </Form.Group>
 
             <Form.Group className="mb-3">
               <Form.Label>Subject</Form.Label>
               <Col xs={12} sm={11} md={11}>
-                <Form.Control type="text" />
+                <Form.Control type="text" name="subject" required/>
               </Col>
             </Form.Group>
 
             <Form.Group className="mb-3">
               <Form.Label>Your Message</Form.Label>
               <Col xs={12} sm={11} md={11}>
-                <Form.Control as="textarea" rows={3} />
+                <Form.Control as="textarea" rows={3} name="message" required/>
               </Col>
             </Form.Group>
             <Button type="submit" variant="outline-danger">
