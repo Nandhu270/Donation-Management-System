@@ -117,7 +117,7 @@
 
 .profile-card {
   border-radius: 15px;
-  max-width: 700px;
+  max-width: 800px;
   width: 100%;
   text-align: center;
 }
@@ -150,6 +150,17 @@
   min-width: 30px;
 }
 
+.profile-donate{
+  border: none;
+  background-color: #0fbc4ec8;
+  border-radius: 25px;
+}
+
+.blood-donate{
+  border: none;
+  background-color: #bc0f0fc8;
+  border-radius: 25px;
+}
 
 @media (max-width: 576px) {
   .con-1 {
@@ -206,6 +217,12 @@
   .profile-icon {
     font-size: 1.5rem;
   }
+  
+  .box-profile{
+    margin-top: 10px;
+    flex-direction: column;
+  }
+
 }
 
 @media (max-width: 768px) {

@@ -15,15 +15,14 @@ import { FaUserCircle } from "react-icons/fa";
 function NavBar() {
   const[page,setpage] = useState("");
   const[isloggedIn, setloggedIn] = useState(false);
-  const[userlogin,setuserlogin] = useState({username: "",name:"", password:""});
+  const[userlogin,setuserlogin] = useState({mail: "", password:""});
   const loc = useLocation();
 
   useEffect(()=>{
-    if(userlogin.username=="" && userlogin.password=="" && userlogin.name==""){
-      if(login.username !=="" && login.password!=="" && login.name!==""){
+    if(userlogin.mail=="" && userlogin.password==""){
+      if(login.mail !=="" && login.password!==""){
         setuserlogin(
-          userlogin.username=login.username,
-          userlogin.name=login.name,
+          userlogin.mail=login.mail,
           userlogin.password=login.password
         )
         setloggedIn(true);
@@ -31,14 +30,14 @@ function NavBar() {
         setloggedIn(false);
       }
     }
-  },[login.username,login.name,login.password])
+  },[login.mail,login.password])
 
   useEffect(()=>{
     setpage(loc.pathname);
   },[loc.pathname])
 
   useEffect(()=>{
-    setloggedIn(login.name!=="")
+    setloggedIn(login.mail!=="")
   })
 
   return (
