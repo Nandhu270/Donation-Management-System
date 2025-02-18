@@ -9,55 +9,57 @@ import Button from "react-bootstrap/Button";
 import { useNavigate } from "react-router-dom";
 
 export default function ContactUs() {
-
   const navigate = useNavigate();
 
-  const[userdetails,setuserdetails] = useState({name:"",mail:"",subject:"",msg:""});
-  const[errors,setErrors] = useState({})
+  const [userdetails, setuserdetails] = useState({
+    name: "",
+    mail: "",
+    subject: "",
+    msg: "",
+  });
+  const [errors, setErrors] = useState({});
 
-  const validateForm = ()=>{
+  const validateForm = () => {
     let result = {};
-    
-    if(!userdetails.name){
+
+    if (!userdetails.name) {
       result.name = "Enter Your Name";
     }
-    
-    if(!userdetails.mail){
-      result.mail = 'Enter Your Mail';
+
+    if (!userdetails.mail) {
+      result.mail = "Enter Your Mail";
     }
 
     const verifyemail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    if(userdetails.mail && !verifyemail.test(userdetails.mail)){
+    if (userdetails.mail && !verifyemail.test(userdetails.mail)) {
       result.mail = "Please enter a valid email address";
     }
-    
 
-    if(!userdetails.subject){
-      result.subject = "Enter the Subject"
+    if (!userdetails.subject) {
+      result.subject = "Enter the Subject";
     }
 
-    if(!userdetails.msg){
+    if (!userdetails.msg) {
       result.msg = "Enter Some Message";
     }
 
     return result;
-  }
+  };
 
-  const handleSubmit = (e)=>{
+  const handleSubmit = (e) => {
     e.preventDefault();
     setErrors({});
-    
+
     const res = validateForm();
 
-    if(Object.keys(res).length > 0){
+    if (Object.keys(res).length > 0) {
       setErrors(res);
       return;
     }
 
     alert("Your Mail Was Sent SuccessFully");
-    navigate("/")
-
-  }
+    navigate("/");
+  };
 
   return (
     <>
@@ -96,7 +98,7 @@ export default function ContactUs() {
             <a href="https://x.com/nandhaNK27" target="_blank">
               <FaTwitter size={30} className="social-icon twitter-con" />
             </a>
-            
+
             <a
               href="https://www.linkedin.com/in/nandhakumar-p-v/"
               target="_blank"
@@ -119,12 +121,12 @@ export default function ContactUs() {
                 <Form.Control
                   type="text"
                   placeholder="Enter Your Name"
-                  value={userdetails.name} 
-                  onChange={(e)=>{
-                    setuserdetails({...userdetails,name:e.target.value})
+                  value={userdetails.name}
+                  onChange={(e) => {
+                    setuserdetails({ ...userdetails, name: e.target.value });
                   }}
                   required
-                  isInvalid = {!!errors.name}
+                  isInvalid={!!errors.name}
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.name}
@@ -139,11 +141,11 @@ export default function ContactUs() {
                   type="email"
                   placeholder="name@example.com"
                   value={userdetails.mail}
-                  onChange={(e)=>{
-                    setuserdetails({...userdetails,mail:e.target.value})
+                  onChange={(e) => {
+                    setuserdetails({ ...userdetails, mail: e.target.value });
                   }}
                   required
-                  isInvalid = {!!errors.mail}
+                  isInvalid={!!errors.mail}
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.mail}
@@ -154,12 +156,14 @@ export default function ContactUs() {
             <Form.Group className="mb-3">
               <Form.Label>Subject</Form.Label>
               <Col xs={12} sm={11} md={11}>
-                <Form.Control type="text" value={userdetails.subject} 
-                onChange={(e)=>{
-                  setuserdetails({...userdetails,subject:e.target.value})
-                }}
-                required
-                isInvalid={!!errors.subject}
+                <Form.Control
+                  type="text"
+                  value={userdetails.subject}
+                  onChange={(e) => {
+                    setuserdetails({ ...userdetails, subject: e.target.value });
+                  }}
+                  required
+                  isInvalid={!!errors.subject}
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.subject}
@@ -170,20 +174,27 @@ export default function ContactUs() {
             <Form.Group className="mb-3">
               <Form.Label>Your Message</Form.Label>
               <Col xs={12} sm={11} md={11}>
-                <Form.Control as="textarea" rows={3} v
-                alue={userdetails.msg}
-                onChange={(e)=>{
-                  setuserdetails({...userdetails,msg:e.target.value})
-                }}
-                required 
-                isInvalid={!!errors.msg}
+                <Form.Control
+                  as="textarea"
+                  rows={3}
+                  v
+                  alue={userdetails.msg}
+                  onChange={(e) => {
+                    setuserdetails({ ...userdetails, msg: e.target.value });
+                  }}
+                  required
+                  isInvalid={!!errors.msg}
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.msg}
                 </Form.Control.Feedback>
               </Col>
             </Form.Group>
-            <Button type="submit" variant="outline-danger" onClick={handleSubmit}>
+            <Button
+              type="submit"
+              variant="outline-danger"
+              onClick={handleSubmit}
+            >
               Send
             </Button>
           </Form>

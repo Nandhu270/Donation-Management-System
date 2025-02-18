@@ -15,7 +15,6 @@ import ScrollToTop from "./ScrollTop";
 import SearchDonor from "../pages/searchdonor";
 
 function HomePage() {
-
   return (
     <BrowserRouter>
       <ScrollToTop />

@@ -5,29 +5,26 @@ import { useNavigate } from "react-router-dom";
 
 function Blood() {
   const navigate = useNavigate();
-  
 
-  function handleScroll(){
-    const ele = document.querySelectorAll('.fade_in');
-    ele.forEach((dt)=>{
+  function handleScroll() {
+    const ele = document.querySelectorAll(".fade_in");
+    ele.forEach((dt) => {
       const res = dt.getBoundingClientRect();
-        if(res.top < window.innerHeight && res.bottom >= 0){
-          if(!dt.classList.contains('show'))
-              dt.classList.add('show');
-        }else{
-          if(dt.classList.contains('show'))
-            dt.classList.remove('show');
-        }
-    })
+      if (res.top < window.innerHeight && res.bottom >= 0) {
+        if (!dt.classList.contains("show")) dt.classList.add("show");
+      } else {
+        if (dt.classList.contains("show")) dt.classList.remove("show");
+      }
+    });
   }
 
-  useEffect(()=>{
-    window.addEventListener("scroll",handleScroll);
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
     handleScroll();
-    return ()=>{
-      window.removeEventListener("scroll",handleScroll);
-    }
-  })
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  });
 
   return (
     <div className="blood-page">

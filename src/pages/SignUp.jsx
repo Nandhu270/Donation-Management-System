@@ -104,14 +104,14 @@ function SignUp() {
     }
     user.push(details);
     alert("Signed Up SuccessFully");
-    navigate("/login")
+    navigate("/login");
   };
 
   return (
     <Container className="signup-container my-4 animate__animated animate__fadeIn">
       <Form className="signup-form shadow-sm p-3 rounded">
         <div className="d-flex justify-content-center align-items-center">
-        <h2 className="text-center mb-3 head-sig">Sign Up</h2>
+          <h2 className="text-center mb-3 head-sig">Sign Up</h2>
         </div>
 
         <Row className="mb-2">
@@ -371,7 +371,11 @@ function SignUp() {
         </Row>
 
         <div className="text-center mt-3">
-          <Button type="submit" variant="outline-danger bt-sig" onClick={handleSubmit}>
+          <Button
+            type="submit"
+            variant="outline-danger bt-sig"
+            onClick={handleSubmit}
+          >
             Submit
           </Button>
         </div>

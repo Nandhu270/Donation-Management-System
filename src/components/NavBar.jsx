@@ -13,32 +13,32 @@ import { login } from "./loginfile";
 import { FaUserCircle } from "react-icons/fa";
 
 function NavBar() {
-  const[page,setpage] = useState("");
-  const[isloggedIn, setloggedIn] = useState(false);
-  const[userlogin,setuserlogin] = useState({mail: "", password:""});
+  const [page, setpage] = useState("");
+  const [isloggedIn, setloggedIn] = useState(false);
+  const [userlogin, setuserlogin] = useState({ mail: "", password: "" });
   const loc = useLocation();
 
-  useEffect(()=>{
-    if(userlogin.mail=="" && userlogin.password==""){
-      if(login.mail !=="" && login.password!==""){
+  useEffect(() => {
+    if (userlogin.mail == "" && userlogin.password == "") {
+      if (login.mail !== "" && login.password !== "") {
         setuserlogin(
-          userlogin.mail=login.mail,
-          userlogin.password=login.password
-        )
+          (userlogin.mail = login.mail),
+          (userlogin.password = login.password)
+        );
         setloggedIn(true);
-      }else{
+      } else {
         setloggedIn(false);
       }
     }
-  },[login.mail,login.password])
+  }, [login.mail, login.password]);
 
-  useEffect(()=>{
+  useEffect(() => {
     setpage(loc.pathname);
-  },[loc.pathname])
+  }, [loc.pathname]);
 
-  useEffect(()=>{
-    setloggedIn(login.mail!=="")
-  })
+  useEffect(() => {
+    setloggedIn(login.mail !== "");
+  });
 
   return (
     <Navbar bg="light" data-bs-theme="light" expand="sm">
@@ -52,25 +52,56 @@ function NavBar() {
             height="50"
             className="d-inline-block align-top"
             onClick={ScrollToTop}
-          /> 
+          />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
-            <Nav.Link as={Link} to="/" onClick={()=>setpage("/")} className={page==="/"?"active":""}>
+            <Nav.Link
+              as={Link}
+              to="/"
+              onClick={() => setpage("/")}
+              className={page === "/" ? "active" : ""}
+            >
               Home
             </Nav.Link>
-            <Nav.Link as={Link} to="/about" onClick={()=>setpage("/about")} className={page==="/about"?"active":""}>
+            <Nav.Link
+              as={Link}
+              to="/about"
+              onClick={() => setpage("/about")}
+              className={page === "/about" ? "active" : ""}
+            >
               About
             </Nav.Link>
-            <Nav.Link as={Link} to="/blog" onClick={()=>setpage("/blog")} className={page==="/blog"?"active":""}>
+            <Nav.Link
+              as={Link}
+              to="/blog"
+              onClick={() => setpage("/blog")}
+              className={page === "/blog" ? "active" : ""}
+            >
               Blog
             </Nav.Link>
-            <Nav.Link as={Link} to="/contactus" onClick={()=>setpage("/contactus")} className={page==="/contactus"?"active":""}>
-              Contact 
+            <Nav.Link
+              as={Link}
+              to="/contactus"
+              onClick={() => setpage("/contactus")}
+              className={page === "/contactus" ? "active" : ""}
+            >
+              Contact
             </Nav.Link>
-            <Nav.Link as={Link} to="/login" onClick={()=>setpage("/login")} className={page==="/login"?"active":""}>
-              {isloggedIn?<><FaUserCircle size={33}/></>:'Login'}
+            <Nav.Link
+              as={Link}
+              to="/login"
+              onClick={() => setpage("/login")}
+              className={page === "/login" ? "active" : ""}
+            >
+              {isloggedIn ? (
+                <>
+                  <FaUserCircle size={33} />
+                </>
+              ) : (
+                "Login"
+              )}
             </Nav.Link>
           </Nav>
           <Nav.Link

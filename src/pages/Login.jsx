@@ -284,7 +284,7 @@ export default function Login() {
             <Card className="blood-donate">
               <CardBody className="text-center">
                 <h3>Blood Donated</h3>
-                <h3>{blood[Math.floor(Math.random() * 15) + 1]}</h3>
+                <h3>{blood[Math.floor(Math.random() * 8) + 1]+" Units"}</h3>
               </CardBody>
             </Card>
           </Container>

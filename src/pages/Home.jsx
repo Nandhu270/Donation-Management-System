@@ -1,5 +1,5 @@
-import React,{useEffect} from "react";
-import { Container, Button, Carousel,Row,Col } from "react-bootstrap";
+import React, { useEffect } from "react";
+import { Container, Button, Carousel, Row, Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/Home.css";
 import { useNavigate } from "react-router-dom";
@@ -13,7 +13,6 @@ export default function Home() {
     "https://i.pinimg.com/736x/72/14/21/7214211d5a47a0e7fcd23182a192e9c6.jpg",
     "https://images.unsplash.com/photo-1589104760192-ccab0ce0d90f?q=80&w=2067&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   ];
-
 
   const handleScroll = () => {
     const elements = document.querySelectorAll(".fade-in");
@@ -53,7 +52,9 @@ export default function Home() {
                 <Row className="overlay align-items-center justify-content-center text-center">
                   <Col>
                     <h1 className="text-light">Join the Life-Saving Cause</h1>
-                    <p className="text-light">Be a Hero, Donate Something Today that you Can!...</p>
+                    <p className="text-light">
+                      Be a Hero, Donate Something Today that you Can!...
+                    </p>
                     <div className="button-content">
                       <Button
                         variant="outline-light"

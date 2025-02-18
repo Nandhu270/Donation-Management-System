@@ -1,6 +1,6 @@
 import React from "react";
 import HomePage from "./components/RoutingHomePage";
-import './App.css'
+import "./App.css";
 
 function App() {
   return <HomePage />;

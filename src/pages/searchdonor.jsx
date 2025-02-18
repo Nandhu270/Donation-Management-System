@@ -4,46 +4,50 @@ import { Container, Form, Col, Button, Card, CardBody } from "react-bootstrap";
 import { details } from "../components/loginfile.js";
 
 function SearchDonor() {
-  const [search, setsearch] = useState({blood: "", country: "", pincode: "", msg: ""});
+  const [search, setsearch] = useState({
+    blood: "",
+    country: "",
+    pincode: "",
+    msg: "",
+  });
   const [userFound, setuserFound] = useState(false);
   const [foundDonor, setFoundDonor] = useState(null);
   const [bloodtype, setbloodtype] = useState(null);
-  const [errors,setErrors] = useState({})
+  const [errors, setErrors] = useState({});
 
-  const validateForm = ()=>{
+  const validateForm = () => {
     const result = {};
 
-    if(!search.blood){
-      result.blood = "Enter the Blood Type"
+    if (!search.blood) {
+      result.blood = "Enter the Blood Type";
     }
 
-    if(!search.country){
-      result.country = "Enter the Country"
+    if (!search.country) {
+      result.country = "Enter the Country";
     }
 
-    if(!search.pincode){
-      result.pincode = "Enter the Pincode"
+    if (!search.pincode) {
+      result.pincode = "Enter the Pincode";
     }
 
-    const verifypin = /^[0-9]+$/
-    if(search.pincode && !verifypin.test(search.pincode)){
-      result.pincode = "Enter Valid Pincode"
+    const verifypin = /^[0-9]+$/;
+    if (search.pincode && !verifypin.test(search.pincode)) {
+      result.pincode = "Enter Valid Pincode";
     }
-    
-    if(!search.msg){
-      result.msg = "Enter the Message"
+
+    if (!search.msg) {
+      result.msg = "Enter the Message";
     }
 
     return result;
-  }
+  };
 
   const handleSearch = (e) => {
-
     e.preventDefault();
     setErrors({});
     const res = validateForm();
 
-    if(Object.keys(res).length > 0){
+    if (Object.keys(res).length > 0) {
       setErrors(res);
       return;
     }
@@ -98,7 +102,7 @@ function SearchDonor() {
                       setsearch({ ...search, blood: e.target.value })
                     }
                     required
-                    isInvalid = {!!errors.blood}
+                    isInvalid={!!errors.blood}
                   />
                   <Form.Control.Feedback type="invalid">
                     {errors.blood}
@@ -118,7 +122,7 @@ function SearchDonor() {
                       setsearch({ ...search, country: e.target.value })
                     }
                     required
-                    isInvalid = {!!errors.country}
+                    isInvalid={!!errors.country}
                   />
                   <Form.Control.Feedback type="invalid">
                     {errors.country}
@@ -138,7 +142,7 @@ function SearchDonor() {
                       setsearch({ ...search, pincode: e.target.value })
                     }
                     required
-                    isInvalid = {!!errors.pincode}
+                    isInvalid={!!errors.pincode}
                   />
                   <Form.Control.Feedback type="invalid">
                     {errors.pincode}
@@ -161,7 +165,7 @@ function SearchDonor() {
                       setsearch({ ...search, msg: e.target.value })
                     }
                     required
-                    isInvalid = {!!errors.msg}
+                    isInvalid={!!errors.msg}
                   />
                   <Form.Control.Feedback type="invalid">
                     {errors.msg}

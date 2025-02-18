@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function Blog() {
   const navigate = useNavigate();
-  
+
   return (
     <>
       <Container className="blog-container">

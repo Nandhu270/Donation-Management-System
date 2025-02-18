@@ -106,7 +106,6 @@
   top: 8px;
 }
 
-
 .bt {
   background-color: #ff00003f;
   border-radius: 15px;
@@ -119,7 +118,6 @@
   color: #ff000090;
   transform: translateY(-3px);
 }
-
 
 @media (max-width: 991px) {
   .navbar-collapse {
@@ -158,8 +156,8 @@
     width: 30px;
     height: 3px;
   }
-  
-  .bt{
+
+  .bt {
     margin-top: 10px;
     margin-bottom: 10px;
   }
@@ -194,5 +192,4 @@
   .navbar-nav .nav-link:hover {
     color: #ff000090;
   }
-  
 }

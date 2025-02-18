@@ -9,8 +9,19 @@ export default function Donate() {
   const navigate = useNavigate();
 
   const [details, setdetails] = useState({
-    currency: "", amount: "", paytype: "", mail: "", name: "", blood: "", mobile: "",
-    birth: "", gender: "", address: "", country: "", pincode: ""});
+    currency: "",
+    amount: "",
+    paytype: "",
+    mail: "",
+    name: "",
+    blood: "",
+    mobile: "",
+    birth: "",
+    gender: "",
+    address: "",
+    country: "",
+    pincode: "",
+  });
   const [errors, setErrors] = useState({});
 
   const validateForm = () => {
@@ -95,12 +106,11 @@ export default function Donate() {
       return;
     }
 
-    if(!confirm("Proceed to Payment")){
-      alert("Transaction Denied!...")
-    }
-    else{
-    alert("Donated SuccessFully! Thank You!...");
-    navigate("/");
+    if (!confirm("Proceed to Payment")) {
+      alert("Transaction Denied!...");
+    } else {
+      alert("Donated SuccessFully! Thank You!...");
+      navigate("/");
     }
   };
 

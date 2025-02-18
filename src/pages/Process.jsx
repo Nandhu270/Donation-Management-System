@@ -1,4 +1,4 @@
-import React,{useEffect} from "react";
+import React, { useEffect } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import "../css/Process.css";
 import { useNavigate } from "react-router-dom";
@@ -6,27 +6,25 @@ import { useNavigate } from "react-router-dom";
 function Process() {
   const navigate = useNavigate();
 
-    function handleScroll(){
-      const ele = document.querySelectorAll('.fade_in');
-      ele.forEach((dt)=>{
-        const res = dt.getBoundingClientRect();
-          if(res.top < window.innerHeight && res.bottom >= 0){
-            if(!dt.classList.contains('show'))
-                dt.classList.add('show');
-          }else{
-            if(dt.classList.contains('show'))
-              dt.classList.remove('show');
-          }
-      })
-    }
-  
-    useEffect(()=>{
-      window.addEventListener("scroll",handleScroll);
-      handleScroll();
-      return ()=>{
-        window.removeEventListener("scroll",handleScroll);
+  function handleScroll() {
+    const ele = document.querySelectorAll(".fade_in");
+    ele.forEach((dt) => {
+      const res = dt.getBoundingClientRect();
+      if (res.top < window.innerHeight && res.bottom >= 0) {
+        if (!dt.classList.contains("show")) dt.classList.add("show");
+      } else {
+        if (dt.classList.contains("show")) dt.classList.remove("show");
       }
-    })
+    });
+  }
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  });
 
   return (
     <>
@@ -43,7 +41,9 @@ function Process() {
         </ul>
 
         <h3 className="eligibility-heading fade_in">Who can donate?</h3>
-        <p className="eligibility-text fade_in">You can probably donate blood if:</p>
+        <p className="eligibility-text fade_in">
+          You can probably donate blood if:
+        </p>
         <ul className="eligibility-list fade_in">
           <li>
             You are 18 or over. In Finland, the oldest age at which you can give

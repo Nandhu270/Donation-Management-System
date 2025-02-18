@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Col, Container } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import "../css/Footer.css";
 import {
   FaFacebook,
@@ -85,7 +85,7 @@ function Footer() {
               >
                 <FaInstagram size={30} className="social-icon instagram" />
               </a>
-              
+
               <a
                 href="https://x.com/nandhaNK27"
                 target="_blank"

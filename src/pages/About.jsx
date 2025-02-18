@@ -3,13 +3,13 @@ import "../css/About.css";
 import { Container } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/About.css";
-import 'animate.css';
+import "animate.css";
 
 export default function About() {
   return (
     <>
       <Container
-        fluid           
+        fluid
         className="mt-4 animate__animated animate__fadeIn d-flex align-items-center justify-content-center head"
       >
         <h2>Who We Are</h2>
