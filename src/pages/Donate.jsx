@@ -99,6 +99,12 @@ export default function Donate() {
     e.preventDefault();
     setErrors({});
 
+    const log = JSON.parse(localStorage.getItem("islogin"));
+    if (!log) {
+      alert("Please Login First");
+      navigate("/login");
+    }
+
     const res = validateForm();
 
     if (Object.keys(res).length > 0) {

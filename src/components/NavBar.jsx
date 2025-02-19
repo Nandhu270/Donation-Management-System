@@ -26,8 +26,10 @@ function NavBar() {
           (userlogin.password = login.password)
         );
         setloggedIn(true);
+        localStorage.setItem("islogin", JSON.stringify(true));
       } else {
         setloggedIn(false);
+        localStorage.setItem("islogin", JSON.stringify(false));
       }
     }
   }, [login.mail, login.password]);
@@ -38,6 +40,10 @@ function NavBar() {
 
   useEffect(() => {
     setloggedIn(login.mail !== "");
+    localStorage.setItem(
+      "islogin",
+      login.mail !== "" ? JSON.stringify(true) : JSON.stringify(false)
+    );
   });
 
   return (

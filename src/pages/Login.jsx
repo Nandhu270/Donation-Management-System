@@ -1,11 +1,28 @@
 import React, { useEffect, useState } from "react";
 import "../css/login.css";
-import { Button, Container, Row, Col, Card, CardBody, InputGroup } from "react-bootstrap";
+import {
+  Button,
+  Container,
+  Row,
+  Col,
+  Card,
+  CardBody,
+  InputGroup,
+} from "react-bootstrap";
 import { FaCheck } from "react-icons/fa";
 import Form from "react-bootstrap/Form";
 import { Link, useNavigate } from "react-router-dom";
 import { login, details, user, blood } from "../components/loginfile";
-import { FaUser, FaEnvelope, FaTint, FaPhoneAlt, FaVenusMars, FaMapMarkerAlt, FaFlag, FaHashtag} from "react-icons/fa";
+import {
+  FaUser,
+  FaEnvelope,
+  FaTint,
+  FaPhoneAlt,
+  FaVenusMars,
+  FaMapMarkerAlt,
+  FaFlag,
+  FaHashtag,
+} from "react-icons/fa";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
 export default function Login() {
@@ -57,8 +74,7 @@ export default function Login() {
     }
     const matchedUser = user.find(
       (data) =>
-        data.mail === userlogin.mail &&
-        data.password === userlogin.password
+        data.mail === userlogin.mail && data.password === userlogin.password
     );
 
     if (matchedUser) {
@@ -73,7 +89,7 @@ export default function Login() {
 
   const loggingout = () => {
     if (login.mail && login.password) {
-      setUserLogin({ mail: "", password: ""});
+      setUserLogin({ mail: "", password: "" });
       login.mail = "";
       login.password = "";
       setlogin(false);
@@ -88,23 +104,25 @@ export default function Login() {
   });
 
   const loggeduser = user.find(
-    (data) =>
-      data.mail === login.mail &&
-      data.password === login.password
+    (data) => data.mail === login.mail && data.password === login.password
   );
 
   const profileDetails = loggeduser
-  ? [
-      { icon: <FaUser />, label: "Name", value: loggeduser.name },
-      { icon: <FaEnvelope />, label: "Email", value: loggeduser.mail },
-      { icon: <FaTint />, label: "Blood Group", value: loggeduser.blood },
-      { icon: <FaPhoneAlt />, label: "Mobile", value: loggeduser.mobile },
-      { icon: <FaVenusMars />, label: "Gender", value: loggeduser.gender },
-      { icon: <FaMapMarkerAlt />, label: "Address", value: loggeduser.address },
-      { icon: <FaHashtag />, label: "Pincode", value: loggeduser.pincode },
-      { icon: <FaFlag />, label: "Country", value: loggeduser.country },
-    ]
-  : [];
+    ? [
+        { icon: <FaUser />, label: "Name", value: loggeduser.name },
+        { icon: <FaEnvelope />, label: "Email", value: loggeduser.mail },
+        { icon: <FaTint />, label: "Blood Group", value: loggeduser.blood },
+        { icon: <FaPhoneAlt />, label: "Mobile", value: loggeduser.mobile },
+        { icon: <FaVenusMars />, label: "Gender", value: loggeduser.gender },
+        {
+          icon: <FaMapMarkerAlt />,
+          label: "Address",
+          value: loggeduser.address,
+        },
+        { icon: <FaHashtag />, label: "Pincode", value: loggeduser.pincode },
+        { icon: <FaFlag />, label: "Country", value: loggeduser.country },
+      ]
+    : [];
 
   return (
     <>
@@ -173,7 +191,7 @@ export default function Login() {
                   <Form.Group className="mb-3">
                     <Form.Label>Password</Form.Label>
                     <Col xs={12} sm={11} md={11}>
-                      <InputGroup >
+                      <InputGroup>
                         <Form.Control
                           type={showPassword ? "text" : "password"}
                           placeholder="Password"
@@ -188,12 +206,18 @@ export default function Login() {
                         />
                         <InputGroup.Text
                           onClick={() => setShowPassword(!showPassword)}
-                          style={{ cursor: "pointer",height:'1px',marginTop:'10px',padding:'10px'}}
+                          style={{
+                            cursor: "pointer",
+                            height: "1px",
+                            marginTop: "10px",
+                            padding: "10px",
+                          }}
                         >
                           <i
                             className={
                               showPassword ? "bi bi-eye-slash" : "bi bi-eye"
-                            } style={{padding:'5px'}}
+                            }
+                            style={{ padding: "5px" }}
                           ></i>
                         </InputGroup.Text>
                         <Form.Control.Feedback type="invalid">
@@ -244,8 +268,7 @@ export default function Login() {
                 </div>
                 <h2 className="profile-title mb-3">My Profile</h2>
                 <Row className="w-100 g-2 text-center text-md-start">
-                  {
-                  profileDetails.map((item, index) => (
+                  {profileDetails.map((item, index) => (
                     <Col
                       key={index}
                       xs={12}
@@ -261,8 +284,7 @@ export default function Login() {
                       <strong className="me-1">{item.label}:</strong>{" "}
                       <span>{item.value}</span>
                     </Col>
-                  ))
-                  }
+                  ))}
                 </Row>
                 <Button
                   className="mt-3"
@@ -284,7 +306,7 @@ export default function Login() {
             <Card className="blood-donate">
               <CardBody className="text-center">
                 <h3>Blood Donated</h3>
-                <h3>{blood[Math.floor(Math.random() * 8) + 1]+" Units"}</h3>
+                <h3>{blood[Math.floor(Math.random() * 8) + 1] + " Units"}</h3>
               </CardBody>
             </Card>
           </Container>

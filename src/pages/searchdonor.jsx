@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import "../css/searchdonor.css";
 import { Container, Form, Col, Button, Card, CardBody } from "react-bootstrap";
 import { details } from "../components/loginfile.js";
+import { useNavigate } from "react-router-dom";
 
 function SearchDonor() {
+  const navigate = useNavigate();
   const [search, setsearch] = useState({
     blood: "",
     country: "",
@@ -45,6 +47,13 @@ function SearchDonor() {
   const handleSearch = (e) => {
     e.preventDefault();
     setErrors({});
+
+    const log = JSON.parse(localStorage.getItem("islogin"));
+    if (!log) {
+      alert("Please Login First");
+      navigate("/login");
+    }
+
     const res = validateForm();
 
     if (Object.keys(res).length > 0) {
