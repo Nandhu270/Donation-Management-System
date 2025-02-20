@@ -81,6 +81,7 @@ export default function Login() {
       setlogin(true);
       localStorage.clear("user");
       localStorage.setItem("user",JSON.stringify(userlogin));
+      localStorage.setItem("islogin",JSON.stringify(true));
       navigate("/");
     } else {
       alert("Invalid Mail ID or Password");
@@ -91,6 +92,7 @@ export default function Login() {
     setUserLogin({ mail: "", password: "" });
     setlogin(false);
     localStorage.removeItem("user"); 
+    localStorage.setItem("islogin",JSON.stringify(false));
     navigate("/");
   };
 
