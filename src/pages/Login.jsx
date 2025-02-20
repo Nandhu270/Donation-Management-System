@@ -12,7 +12,7 @@ import {
 import { FaCheck } from "react-icons/fa";
 import Form from "react-bootstrap/Form";
 import { Link, useNavigate } from "react-router-dom";
-import { login, details, user, blood } from "../components/loginfile";
+import {details, user, blood } from "../components/loginfile";
 import {
   FaUser,
   FaEnvelope,
@@ -44,7 +44,7 @@ export default function Login() {
 
     const verifyemail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     if (userlogin.mail && !verifyemail.test(userlogin.mail)) {
-      formErrors.maill = "Please enter a valid email address";
+      formErrors.mail = "Please enter a valid email address";
     }
 
     if (!userlogin.password) {
@@ -78,9 +78,9 @@ export default function Login() {
     );
 
     if (matchedUser) {
-      login.mail = userlogin.mail;
-      login.password = userlogin.password;
       setlogin(true);
+      localStorage.clear("user");
+      localStorage.setItem("user",JSON.stringify(userlogin));
       navigate("/");
     } else {
       alert("Invalid Mail ID or Password");
@@ -88,23 +88,19 @@ export default function Login() {
   };
 
   const loggingout = () => {
-    if (login.mail && login.password) {
-      setUserLogin({ mail: "", password: "" });
-      login.mail = "";
-      login.password = "";
-      setlogin(false);
-      navigate("/");
-    } else {
-      alert("Logout Failed");
-    }
+    setUserLogin({ mail: "", password: "" });
+    setlogin(false);
+    localStorage.removeItem("user"); 
+    navigate("/");
   };
 
   useEffect(() => {
-    setlogin(login.mail != "");
-  });
+    setlogin(JSON.parse(localStorage.getItem("user"))!=null);
+  },[]);
 
+  const logged = JSON.parse(localStorage.getItem("user")) || {};
   const loggeduser = user.find(
-    (data) => data.mail === login.mail && data.password === login.password
+    (data) => data.mail === logged.mail && data.password === logged.password
   );
 
   const profileDetails = loggeduser

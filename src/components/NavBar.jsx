@@ -9,41 +9,19 @@ import "../css/NavBar.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import ScrollToTop from "./ScrollTop";
-import { login } from "./loginfile";
 import { FaUserCircle } from "react-icons/fa";
 
 function NavBar() {
   const [page, setpage] = useState("");
   const [isloggedIn, setloggedIn] = useState(false);
-  const [userlogin, setuserlogin] = useState({ mail: "", password: "" });
   const loc = useLocation();
-
-  useEffect(() => {
-    if (userlogin.mail == "" && userlogin.password == "") {
-      if (login.mail !== "" && login.password !== "") {
-        setuserlogin(
-          (userlogin.mail = login.mail),
-          (userlogin.password = login.password)
-        );
-        setloggedIn(true);
-        localStorage.setItem("islogin", JSON.stringify(true));
-      } else {
-        setloggedIn(false);
-        localStorage.setItem("islogin", JSON.stringify(false));
-      }
-    }
-  }, [login.mail, login.password]);
 
   useEffect(() => {
     setpage(loc.pathname);
   }, [loc.pathname]);
 
   useEffect(() => {
-    setloggedIn(login.mail !== "");
-    localStorage.setItem(
-      "islogin",
-      login.mail !== "" ? JSON.stringify(true) : JSON.stringify(false)
-    );
+    setloggedIn(JSON.parse(localStorage.getItem("user"))!=null)
   });
 
   return (
@@ -128,3 +106,4 @@ function NavBar() {
 }
 
 export default NavBar;
+

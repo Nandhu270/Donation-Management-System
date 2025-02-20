@@ -1,7 +1,3 @@
-export const login = {
-  mail: "",
-  password: "",
-};
 
 export const details = [
   {
