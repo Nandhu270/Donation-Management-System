@@ -5,6 +5,7 @@ import "../css/signup.css";
 import { useNavigate } from "react-router-dom";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { user } from "../components/loginfile";
+import Swal from "sweetalert2";
 
 function SignUp() {
   const navigate = useNavigate();
@@ -103,9 +104,17 @@ function SignUp() {
       return;
     }
     user.push(details);
-    alert("Signed Up SuccessFully");
+    showAlert("Registration Success", "Signed Up SuccessFully", "success");
     navigate("/login");
   };
+
+  function showAlert(data, msg, status) {
+    Swal.fire({
+      title: data,
+      text: msg,
+      icon: status,
+    });
+  }
 
   return (
     <Container className="signup-container my-4 animate__animated animate__fadeIn">

@@ -7,6 +7,7 @@ import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 export default function ContactUs() {
   const navigate = useNavigate();
@@ -57,9 +58,17 @@ export default function ContactUs() {
       return;
     }
 
-    alert("Your Mail Was Sent SuccessFully");
+    showAlert("Success", "Your Mail Was Sent SuccessFully", "success");
     navigate("/");
   };
+
+  function showAlert(data, msg, status) {
+    Swal.fire({
+      title: data,
+      text: msg,
+      icon: status,
+    });
+  }
 
   return (
     <>

@@ -12,7 +12,7 @@ import {
 import { FaCheck } from "react-icons/fa";
 import Form from "react-bootstrap/Form";
 import { Link, useNavigate } from "react-router-dom";
-import {details, user, blood } from "../components/loginfile";
+import { details, user, blood } from "../components/loginfile";
 import {
   FaUser,
   FaEnvelope,
@@ -24,6 +24,7 @@ import {
   FaHashtag,
 } from "react-icons/fa";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import Swal from "sweetalert2";
 
 export default function Login() {
   const [userlogin, setUserLogin] = useState({
@@ -80,30 +81,39 @@ export default function Login() {
     if (matchedUser) {
       setlogin(true);
       localStorage.clear("user");
-      localStorage.setItem("user",JSON.stringify(userlogin));
-      localStorage.setItem("islogin",JSON.stringify(true));
+      localStorage.setItem("user", JSON.stringify(userlogin));
+      localStorage.setItem("islogin", JSON.stringify(true));
+      showAlert("Hello User!..", "Logged In SuccessFully", "success");
       navigate("/");
     } else {
-      alert("Invalid Mail ID or Password");
+      showAlert("Invalid Data", "Invalid Mail ID or Password", "error");
     }
   };
 
   const loggingout = () => {
     setUserLogin({ mail: "", password: "" });
     setlogin(false);
-    localStorage.removeItem("user"); 
-    localStorage.setItem("islogin",JSON.stringify(false));
+    localStorage.removeItem("user");
+    localStorage.setItem("islogin", JSON.stringify(false));
     navigate("/");
   };
 
   useEffect(() => {
-    setlogin(JSON.parse(localStorage.getItem("user"))!=null);
-  },[]);
+    setlogin(JSON.parse(localStorage.getItem("user")) != null);
+  }, []);
 
   const logged = JSON.parse(localStorage.getItem("user")) || {};
   const loggeduser = user.find(
     (data) => data.mail === logged.mail && data.password === logged.password
   );
+
+  function showAlert(data, msg, status) {
+    Swal.fire({
+      title: data,
+      text: msg,
+      icon: status,
+    });
+  }
 
   const profileDetails = loggeduser
     ? [

@@ -4,6 +4,7 @@ import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/signup.css";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 export default function Donate() {
   const navigate = useNavigate();
@@ -95,13 +96,13 @@ export default function Donate() {
     return res;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
 
     const log = JSON.parse(localStorage.getItem("islogin"));
     if (!log) {
-      alert("Please Login First");
+      showAlert("Login", "Please Login First", "warning");
       navigate("/login");
     }
 
@@ -112,10 +113,20 @@ export default function Donate() {
       return;
     }
 
-    if (!confirm("Proceed to Payment")) {
-      alert("Transaction Denied!...");
+    const confirmation = await Swal.fire({
+      title: "Are you sure?",
+      text: "You want to Donate",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Donate",
+    });
+
+    if (!confirmation.isConfirmed) {
+      showAlert("Failed", "Transaction Denied!...", "error");
     } else {
-      alert("Donated SuccessFully! Thank You!...");
+      showAlert("Success", "Donated SuccessFully! Thank You!...", "success");
       navigate("/");
     }
   };
@@ -135,6 +146,14 @@ export default function Donate() {
       }
     });
   };
+
+  function showAlert(data, msg, status) {
+    Swal.fire({
+      title: data,
+      text: msg,
+      icon: status,
+    });
+  }
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);

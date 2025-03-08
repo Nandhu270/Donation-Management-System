@@ -3,6 +3,7 @@ import "../css/searchdonor.css";
 import { Container, Form, Col, Button, Card, CardBody } from "react-bootstrap";
 import { details } from "../components/loginfile.js";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 function SearchDonor() {
   const navigate = useNavigate();
@@ -50,7 +51,7 @@ function SearchDonor() {
 
     const log = JSON.parse(localStorage.getItem("islogin"));
     if (!log) {
-      alert("Please Login First");
+      showAlert("Warning", "Please Login First", "warning");
       navigate("/login");
     }
 
@@ -86,6 +87,14 @@ function SearchDonor() {
       }
     }
   };
+
+  function showAlert(data, msg, status) {
+    Swal.fire({
+      title: data,
+      text: msg,
+      icon: status,
+    });
+  }
 
   return (
     <>
