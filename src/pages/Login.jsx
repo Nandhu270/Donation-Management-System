@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../css/login.css";
+import Swal from "sweetalert2";
 import {
   Button,
   Container,
@@ -12,7 +13,7 @@ import {
 import { FaCheck } from "react-icons/fa";
 import Form from "react-bootstrap/Form";
 import { Link, useNavigate } from "react-router-dom";
-import {details, user, blood } from "../components/loginfile";
+import { blood } from "../components/loginfile";
 import {
   FaUser,
   FaEnvelope,
@@ -24,16 +25,41 @@ import {
   FaHashtag,
 } from "react-icons/fa";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import axios from "axios";
 
 export default function Login() {
-  const [userlogin, setUserLogin] = useState({
-    mail: "",
-    password: "",
-  });
-  const [islogin, setlogin] = useState(false);
+  const [userlogin, setUserLogin] = useState({ mail: "", password: "" });
+  const [islogin, setLogin] = useState(false);
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
+  const [loggeduser, setLoggedUser] = useState(null);
+  const [donatedamount, setDonatedAmount] = useState(0);
+
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (storedUser) {
+      setUserLogin(storedUser);
+      setLogin(true);
+      fetchUserDetails(storedUser);
+    }
+  }, []);
+
+  const fetchUserDetails = async (user) => {
+    try {
+      const res = await axios.get("http://localhost:5174/login");
+      const matchedUser = res.data.find(
+        (data) => data.mail === user.mail && data.password === user.password
+      );
+
+      if (matchedUser) {
+        setLoggedUser(matchedUser);
+      }
+    } catch (err) {
+      // alert("Error fetching user data:", err);
+      showAlert("Invalid Data", "Error fetching user data", "error");
+    }
+  };
 
   const validateForm = () => {
     let formErrors = {};
@@ -62,48 +88,86 @@ export default function Login() {
     }
     return formErrors;
   };
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
 
     const formErrors = validateForm();
-
     if (Object.keys(formErrors).length > 0) {
       setErrors(formErrors);
       return;
     }
-    const matchedUser = user.find(
-      (data) =>
-        data.mail === userlogin.mail && data.password === userlogin.password
-    );
 
-    if (matchedUser) {
-      setlogin(true);
-      localStorage.clear("user");
-      localStorage.setItem("user",JSON.stringify(userlogin));
-      localStorage.setItem("islogin",JSON.stringify(true));
-      navigate("/");
-    } else {
-      alert("Invalid Mail ID or Password");
+    try {
+      const res = await axios.get("http://localhost:5174/login");
+      const matchedUser = res.data.find(
+        (data) =>
+          data.mail === userlogin.mail && data.password === userlogin.password
+      );
+
+      if (matchedUser) {
+        setLogin(true);
+        setLoggedUser(matchedUser);
+        localStorage.setItem("user", JSON.stringify(userlogin));
+        localStorage.setItem("islogin", JSON.stringify(true));
+        showAlert("Hello User!..", "Logged In SuccessFully", "success");
+        navigate("/");
+      } else {
+        // alert("Invalid Mail ID or Password");
+        showAlert("Invalid Data", "Invalid Mail ID or Password", "error");
+      }
+
+      fetchDonatedAmount(matchedUser);
+    } catch (error) {
+      // alert("Error during login or Server is Not Connected", error);
+      showAlert(
+        "Invalid Data",
+        "Error during login or Server is Not Connected",
+        "error"
+      );
+    }
+  };
+
+  function showAlert(data, msg, status) {
+    Swal.fire({
+      title: data,
+      text: msg,
+      icon: status,
+    });
+  }
+
+  useEffect(() => {
+    if (loggeduser) {
+      fetchDonatedAmount(loggeduser);
+    }
+  }, [loggeduser]);
+
+  const fetchDonatedAmount = async (user) => {
+    try {
+      const result = await axios.get("http://localhost:5174/amount");
+      let sum = 0;
+
+      result.data.forEach((data) => {
+        if (user.mail === data.mail) {
+          sum += data.amount;
+        }
+      });
+
+      setDonatedAmount(sum);
+    } catch (error) {
+      console.log("Error fetching donation amount:", error.message);
     }
   };
 
   const loggingout = () => {
     setUserLogin({ mail: "", password: "" });
-    setlogin(false);
-    localStorage.removeItem("user"); 
-    localStorage.setItem("islogin",JSON.stringify(false));
+    setLogin(false);
+    setLoggedUser(null);
+    localStorage.removeItem("user");
+    localStorage.setItem("islogin", JSON.stringify(false));
     navigate("/");
   };
-
-  useEffect(() => {
-    setlogin(JSON.parse(localStorage.getItem("user"))!=null);
-  },[]);
-
-  const logged = JSON.parse(localStorage.getItem("user")) || {};
-  const loggeduser = user.find(
-    (data) => data.mail === logged.mail && data.password === logged.password
-  );
 
   const profileDetails = loggeduser
     ? [
@@ -126,6 +190,7 @@ export default function Login() {
     <>
       {!islogin ? (
         <>
+          0
           <Container
             fluid
             className="mt-4 d-flex justify-content-center align-items-center con-login animate__animated animate__fadeIn"
@@ -241,7 +306,6 @@ export default function Login() {
               </Col>
             </Row>
           </Container>
-
           <Container
             fluid
             className="d-flex align-items-center justify-content-center con-fot text-center"
@@ -298,7 +362,7 @@ export default function Login() {
             <Card className="profile-donate">
               <CardBody className="text-center">
                 <h3>Amount Donated</h3>
-                <h3>{details[Math.floor(Math.random() * 13) + 1].payement} </h3>
+                <h3>{donatedamount} </h3>
               </CardBody>
             </Card>
             <Card className="blood-donate">

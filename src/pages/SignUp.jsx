@@ -4,7 +4,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/signup.css";
 import { useNavigate } from "react-router-dom";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import { user } from "../components/loginfile";
+import Swal from "sweetalert2";
+// import { user } from "../components/loginfile";
+import axios from "axios";
 
 function SignUp() {
   const navigate = useNavigate();
@@ -47,11 +49,7 @@ function SignUp() {
     }
     const verifypass =
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{6,}$/;
-    if (
-      details.password &&
-      details.password.length < 6 &&
-      !verifypass.test(details.password)
-    ) {
+    if (details.password && !verifypass.test(details.password)) {
       res.password =
         "Password must be at least 6 characters long and special character";
     }
@@ -92,7 +90,7 @@ function SignUp() {
     return res;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
 
@@ -102,14 +100,49 @@ function SignUp() {
       setErrors(res);
       return;
     }
-    user.push(details);
-    alert("Signed Up SuccessFully");
-    navigate("/login");
+    // user.push(details);
+    await axios
+      .post("http://localhost:5174/signup", {
+        name: details.name,
+        blood: details.blood,
+        mail: details.mail,
+        password: details.password,
+        mobile: details.mobile,
+        birth: details.birth,
+        gender: details.gender,
+        address: details.address,
+        country: details.country,
+        pincode: details.pincode,
+      })
+      .then((res) => {
+        // alert("Signed Up SuccessFully");
+        showAlert("Registration Success", "Signed Up SuccessFully", "success");
+        navigate("/login");
+      })
+      .catch((err) => {
+        // alert("User Already Exist or Server is Not Connected",err);
+        showAlert(
+          "Exist",
+          "User Already Exist or Server is Not Connected",
+          "warning"
+        );
+      });
   };
+
+  function showAlert(data, msg, status) {
+    Swal.fire({
+      title: data,
+      text: msg,
+      icon: status,
+    });
+  }
 
   return (
     <Container className="signup-container my-4 animate__animated animate__fadeIn">
-      <Form className="signup-form shadow-sm p-3 rounded">
+      <Form
+        className="signup-form shadow-sm p-3 rounded"
+        onSubmit={handleSubmit}
+      >
         <div className="d-flex justify-content-center align-items-center">
           <h2 className="text-center mb-3 head-sig">Sign Up</h2>
         </div>
@@ -137,7 +170,27 @@ function SignUp() {
           <Col md={6}>
             <Form.Group>
               <Form.Label className="signup-label">Blood Group</Form.Label>
-              <Form.Control
+              <Form.Select
+                className="signup-input"
+                required
+                value={details.blood}
+                onChange={(e) =>
+                  setdetails({ ...details, blood: e.target.value })
+                }
+                isInvalid={!!errors.blood}
+              >
+                <option value="">--Blood Group--</option>
+                <option value="A+ve">A+</option>
+                <option value="B+ve">B+</option>
+                <option value="O+ve">O+</option>
+                <option value="AB+ve">AB+</option>
+                <option value="B+ve">B+</option>
+                <option value="B-ve">B-</option>
+                <option value="A-ve">A-</option>
+                <option value="AB-ve">AB-</option>
+                <option value="O-ve">O-</option>
+              </Form.Select>
+              {/* <Form.Control
                 type="text"
                 placeholder="Enter Blood Group"
                 className="signup-input"
@@ -147,7 +200,7 @@ function SignUp() {
                   setdetails({ ...details, blood: e.target.value });
                 }}
                 isInvalid={!!errors.blood}
-              />
+              /> */}
               <Form.Control.Feedback type="invalid">
                 {errors.blood}
               </Form.Control.Feedback>
@@ -371,11 +424,7 @@ function SignUp() {
         </Row>
 
         <div className="text-center mt-3">
-          <Button
-            type="submit"
-            variant="outline-danger bt-sig"
-            onClick={handleSubmit}
-          >
+          <Button type="submit" variant="outline-danger bt-sig">
             Submit
           </Button>
         </div>

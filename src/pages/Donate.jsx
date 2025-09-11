@@ -4,6 +4,8 @@ import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/signup.css";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import axios from "axios";
 
 export default function Donate() {
   const navigate = useNavigate();
@@ -46,7 +48,7 @@ export default function Donate() {
     if (!details.mail) {
       res.mail = "Enter Valid Mail Id";
     }
-    const verifyemail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    const verifyemail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (details.mail && !verifyemail.test(details.mail)) {
       res.mail = "Please enter a valid email address";
     }
@@ -95,28 +97,65 @@ export default function Donate() {
     return res;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
 
     const log = JSON.parse(localStorage.getItem("islogin"));
     if (!log) {
-      alert("Please Login First");
+      // alert("Please Login First");
+      showAlert("Login", "Please Login First", "warning");
       navigate("/login");
-    }
-
-    const res = validateForm();
-
-    if (Object.keys(res).length > 0) {
-      setErrors(res);
-      return;
-    }
-
-    if (!confirm("Proceed to Payment")) {
-      alert("Transaction Denied!...");
     } else {
-      alert("Donated SuccessFully! Thank You!...");
-      navigate("/");
+      const res = validateForm();
+
+      if (Object.keys(res).length > 0) {
+        setErrors(res);
+        return;
+      }
+
+      const confirmation = await Swal.fire({
+        title: "Are you sure?",
+        text: "You want to Donate",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Donate",
+      });
+
+      if (!confirmation.isConfirmed) {
+        // alert("Transaction Denied!...");
+        showAlert("Failed", "Transaction Denied!...", "error");
+      } else {
+        // alert("Donated SuccessFully! Thank You!...");
+        showAlert("Success", "Donated SuccessFully! Thank You!...", "success");
+        await axios
+          .post("http://localhost:5174/donate", {
+            currency: details.currency,
+            amount: details.amount,
+            paytype: details.paytype,
+            mail: details.mail,
+            name: details.name,
+            blood: details.blood,
+            mobile: details.mobile,
+            birth: details.birth,
+            gender: details.gender,
+            address: details.address,
+            country: details.country,
+            pincode: details.pincode,
+          })
+          .then(() => {
+            navigate("/");
+          })
+          .catch(() =>
+            showAlert(
+              "Invalid",
+              "Error Occured While Transaction or Server is Not Connected",
+              "error"
+            )
+          );
+      }
     }
   };
 
@@ -135,6 +174,14 @@ export default function Donate() {
       }
     });
   };
+
+  function showAlert(data, msg, status) {
+    Swal.fire({
+      title: data,
+      text: msg,
+      icon: status,
+    });
+  }
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -156,7 +203,10 @@ export default function Donate() {
         className="signup-container my-4 animate__animated animate__fadeIn
       "
       >
-        <Form className="signup-form shadow-sm  p-3 rounded ">
+        <Form
+          className="signup-form shadow-sm  p-3 rounded "
+          onSubmit={handleSubmit}
+        >
           <Row className="mb-2 animate__animated animate__fadeIn">
             <Col md={2}>
               <Form.Group>
@@ -186,9 +236,7 @@ export default function Donate() {
 
             <Col md={5}>
               <Form.Group>
-                <Form.Label className="signup-label">
-                  Payement Amount
-                </Form.Label>
+                <Form.Label className="signup-label">Payment Amount</Form.Label>
                 <Form.Control
                   type="number"
                   placeholder="Enter Amount"
@@ -208,7 +256,7 @@ export default function Donate() {
 
             <Col md={5}>
               <Form.Group>
-                <Form.Label className="signup-label">Payement Type</Form.Label>
+                <Form.Label className="signup-label">Payment Type</Form.Label>
                 <Form.Select
                   className="signup-input"
                   required
@@ -278,7 +326,27 @@ export default function Donate() {
             <Col md={6}>
               <Form.Group>
                 <Form.Label className="signup-label">Blood Group</Form.Label>
-                <Form.Control
+                <Form.Select
+                  className="signup-input"
+                  required
+                  value={details.blood}
+                  onChange={(e) =>
+                    setdetails({ ...details, blood: e.target.value })
+                  }
+                  isInvalid={!!errors.blood}
+                >
+                  <option value="">---</option>
+                  <option value="A+ve">A+</option>
+                  <option value="B+ve">B+</option>
+                  <option value="O+ve">O+</option>
+                  <option value="AB+ve">AB+</option>
+                  <option value="B+ve">B+</option>
+                  <option value="B-ve">B-</option>
+                  <option value="A-ve">A-</option>
+                  <option value="AB-ve">AB-</option>
+                  <option value="O-ve">O-</option>
+                </Form.Select>
+                {/* <Form.Control
                   type="text"
                   placeholder="Enter Blood Group"
                   className="signup-input"
@@ -288,7 +356,7 @@ export default function Donate() {
                     setdetails({ ...details, blood: e.target.value });
                   }}
                   isInvalid={!!errors.blood}
-                />
+                /> */}
                 <Form.Control.Feedback type="invalid">
                   {errors.blood}
                 </Form.Control.Feedback>
@@ -451,11 +519,7 @@ export default function Donate() {
           </Row>
 
           <div className="text-center mt-3">
-            <Button
-              type="submit"
-              variant="outline-danger bt-sig"
-              onClick={handleSubmit}
-            >
+            <Button type="submit" variant="outline-danger bt-sig">
               Submit
             </Button>
           </div>

@@ -7,6 +7,8 @@ import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import axios from "axios";
 
 export default function ContactUs() {
   const navigate = useNavigate();
@@ -46,7 +48,7 @@ export default function ContactUs() {
     return result;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
 
@@ -57,9 +59,35 @@ export default function ContactUs() {
       return;
     }
 
-    alert("Your Mail Was Sent SuccessFully");
-    navigate("/");
+    await axios
+      .post("http://localhost:5174/contactus", {
+        name: userdetails.name,
+        mail: userdetails.mail,
+        subject: userdetails.subject,
+        msg: userdetails.msg,
+      })
+      .then((res) => {
+        // alert("Your Mail Was Sent SuccessFully");
+        showAlert("Success", "Your Mail Was Sent SuccessFully", "success");
+        navigate("/");
+      })
+      .catch((err) => {
+        // alert("Invalid Details Try Again or Server is Not Connected!..")
+        showAlert(
+          "Invalid Data",
+          "Invalid Details Try Again or Server is Not Connected!..",
+          "error"
+        );
+      });
   };
+
+  function showAlert(data, msg, status) {
+    Swal.fire({
+      title: data,
+      text: msg,
+      icon: status,
+    });
+  }
 
   return (
     <>
@@ -113,7 +141,7 @@ export default function ContactUs() {
           </Container>
           <Form
             className="mt-4 animate__animated animate__fadeIn"
-            method="post"
+            onSubmit={handleSubmit}
           >
             <Form.Group className="mb-3">
               <Form.Label>Name</Form.Label>
@@ -177,8 +205,7 @@ export default function ContactUs() {
                 <Form.Control
                   as="textarea"
                   rows={3}
-                  v
-                  alue={userdetails.msg}
+                  value={userdetails.msg}
                   onChange={(e) => {
                     setuserdetails({ ...userdetails, msg: e.target.value });
                   }}
@@ -190,11 +217,7 @@ export default function ContactUs() {
                 </Form.Control.Feedback>
               </Col>
             </Form.Group>
-            <Button
-              type="submit"
-              variant="outline-danger"
-              onClick={handleSubmit}
-            >
+            <Button type="submit" variant="outline-danger">
               Send
             </Button>
           </Form>

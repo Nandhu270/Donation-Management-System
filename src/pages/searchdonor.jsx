@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import "../css/searchdonor.css";
 import { Container, Form, Col, Button, Card, CardBody } from "react-bootstrap";
-import { details } from "../components/loginfile.js";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 function SearchDonor() {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ function SearchDonor() {
   });
   const [userFound, setuserFound] = useState(false);
   const [foundDonor, setFoundDonor] = useState(null);
-  const [bloodtype, setbloodtype] = useState(null);
+  // const [bloodtype, setbloodtype] = useState(null);
   const [errors, setErrors] = useState({});
 
   const validateForm = () => {
@@ -44,14 +45,16 @@ function SearchDonor() {
     return result;
   };
 
-  const handleSearch = (e) => {
+  const handleSearch = async (e) => {
     e.preventDefault();
     setErrors({});
 
     const log = JSON.parse(localStorage.getItem("islogin"));
     if (!log) {
-      alert("Please Login First");
+      // alert("Please Login First");
+      showAlert("Warning", "Please Login First", "warning");
       navigate("/login");
+      return;
     }
 
     const res = validateForm();
@@ -67,25 +70,45 @@ function SearchDonor() {
       search.pincode !== "" &&
       search.msg !== ""
     ) {
-      const result = details.filter((data) => {
-        return (
-          data.blood.toLowerCase().includes(search.blood.toLowerCase()) &&
-          data.country.toLowerCase().includes(search.country.toLowerCase()) &&
-          data.pincode.toString().includes(search.pincode.toString())
+      var result = [];
+      try {
+        const res = await axios.get("http://localhost:5174/search");
+        result = res.data.filter((data) => {
+          return (
+            data.blood.toLowerCase().includes(search.blood.toLowerCase()) &&
+            data.country.toLowerCase().includes(search.country.toLowerCase()) &&
+            data.pincode.toString().includes(search.pincode.toString())
+          );
+        });
+      } catch (err) {
+        console.error("Error fetching data:", err);
+        // alert("Error Occured While Fetching Data or Server is Not Connected");
+        showAlert(
+          "Invalid",
+          "Error Occured While Fetching Data or Server is Not Connected",
+          "error"
         );
-      });
+      }
 
       if (result.length > 0) {
         setuserFound(true);
-        setFoundDonor(result[0].pincode);
-        setbloodtype(result[0].blood);
+        setFoundDonor(result);
+        // setbloodtype(result[0].blood);
       } else {
         setuserFound(true);
         setFoundDonor(null);
-        setbloodtype(null);
+        // setbloodtype(null);
       }
     }
   };
+
+  function showAlert(data, msg, status) {
+    Swal.fire({
+      title: data,
+      text: msg,
+      icon: status,
+    });
+  }
 
   return (
     <>
@@ -96,13 +119,33 @@ function SearchDonor() {
             className="search-donor-container mt-4 animate__animated animate__fadeIn"
           >
             <h1 className="search-donor-heading">Search Donor</h1>
-            <Form className="search-donor-form">
+            <Form className="search-donor-form" onSubmit={handleSearch}>
               <Form.Group className="form-group-custom">
                 <Form.Label className="form-label-custom">
                   Blood Group
                 </Form.Label>
                 <Col xs={12} sm={11} md={11} className="form-col-custom">
-                  <Form.Control
+                  <Form.Select
+                    className="form-control-custom"
+                    required
+                    value={search.blood}
+                    onChange={(e) =>
+                      setsearch({ ...search, blood: e.target.value })
+                    }
+                    isInvalid={!!errors.blood}
+                  >
+                    <option value="">--Blood Group--</option>
+                    <option value="A+ve">A+</option>
+                    <option value="B+ve">B+</option>
+                    <option value="O+ve">O+</option>
+                    <option value="AB+ve">AB+</option>
+                    <option value="B+ve">B+</option>
+                    <option value="B-ve">B-</option>
+                    <option value="A-ve">A-</option>
+                    <option value="AB-ve">AB-</option>
+                    <option value="O-ve">O-</option>
+                  </Form.Select>
+                  {/* <Form.Control
                     type="text"
                     placeholder="Enter Blood Group"
                     className="form-control-custom"
@@ -112,7 +155,7 @@ function SearchDonor() {
                     }
                     required
                     isInvalid={!!errors.blood}
-                  />
+                  /> */}
                   <Form.Control.Feedback type="invalid">
                     {errors.blood}
                   </Form.Control.Feedback>
@@ -122,7 +165,25 @@ function SearchDonor() {
               <Form.Group className="form-group-custom">
                 <Form.Label className="form-label-custom">Country</Form.Label>
                 <Col xs={12} sm={11} md={11} className="form-col-custom">
-                  <Form.Control
+                  <Form.Select
+                    className="form-control-custom"
+                    required
+                    value={search.country}
+                    onChange={(e) =>
+                      setsearch({ ...search, country: e.target.value })
+                    }
+                    isInvalid={!!errors.country}
+                  >
+                    <option value="">--Select Country--</option>
+                    <option value="India">India</option>
+                    <option value="America">America</option>
+                    <option value="England">England</option>
+                    <option value="Russia">Russia</option>
+                    <option value="France">France</option>
+                    <option value="Germany">Germany</option>
+                    <option value="Others">Others</option>
+                  </Form.Select>
+                  {/* <Form.Control
                     type="text"
                     placeholder="Enter Your Country"
                     className="form-control-custom"
@@ -132,7 +193,7 @@ function SearchDonor() {
                     }
                     required
                     isInvalid={!!errors.country}
-                  />
+                  /> */}
                   <Form.Control.Feedback type="invalid">
                     {errors.country}
                   </Form.Control.Feedback>
@@ -184,10 +245,9 @@ function SearchDonor() {
 
               <div className="button-container">
                 <Button
-                  type="button"
+                  type="submit"
                   variant="outline-danger"
                   className="send-button"
-                  onClick={handleSearch}
                 >
                   Search
                 </Button>
@@ -197,11 +257,11 @@ function SearchDonor() {
         </>
       ) : (
         <>
-          {foundDonor != null && bloodtype != null ? (
+          {foundDonor != null ? (
             <>
               <Container className="mt-4 d-flex flex-column justify-content-center align-items-center gap-2">
                 <h1 className="text-center">Donors Found</h1>
-                {details
+                {/* details
                   .filter(
                     (data) =>
                       data.pincode === foundDonor && data.blood === bloodtype
@@ -226,7 +286,31 @@ function SearchDonor() {
                         </p>
                       </CardBody>
                     </Card>
-                  ))}
+                  )) */}
+
+                {foundDonor.map((data) => {
+                  return (
+                    <Card className="w-50" key={data.mobile}>
+                      <CardBody>
+                        <p>
+                          <strong>Name:</strong> {data.name}
+                        </p>
+                        <p>
+                          <strong>Email:</strong> {data.mail}
+                        </p>
+                        <p>
+                          <strong>Phone Number:</strong> {data.mobile}
+                        </p>
+                        <p>
+                          <strong>Blood Type:</strong> {data.blood}
+                        </p>
+                        <p>
+                          <strong>Gender:</strong> {data.gender}
+                        </p>
+                      </CardBody>
+                    </Card>
+                  );
+                })}
               </Container>
             </>
           ) : (
