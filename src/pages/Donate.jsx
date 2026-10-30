@@ -6,9 +6,11 @@ import "../css/signup.css";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import axios from "axios";
+import { useAuth } from "../context/AuthContext";
 
 export default function Donate() {
   const navigate = useNavigate();
+  const { user, isAuthenticated } = useAuth();
 
   const [details, setdetails] = useState({
     currency: "",
@@ -25,6 +27,23 @@ export default function Donate() {
     pincode: "",
   });
   const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    if (user) {
+      setdetails((prev) => ({
+        ...prev,
+        mail: user.mail || prev.mail,
+        name: user.name || prev.name,
+        blood: user.blood || prev.blood,
+        mobile: user.mobile ? String(user.mobile) : prev.mobile,
+        birth: user.birth || prev.birth,
+        gender: user.gender || prev.gender,
+        address: user.address || prev.address,
+        country: user.country || prev.country,
+        pincode: user.pincode ? String(user.pincode) : prev.pincode,
+      }));
+    }
+  }, [user]);
 
   const validateForm = () => {
     const res = {};
@@ -101,7 +120,7 @@ export default function Donate() {
     e.preventDefault();
     setErrors({});
 
-    const log = JSON.parse(localStorage.getItem("islogin"));
+    const log = isAuthenticated;
     if (!log) {
       // alert("Please Login First");
       showAlert("Login", "Please Login First", "warning");
@@ -144,6 +163,7 @@ export default function Donate() {
             address: details.address,
             country: details.country,
             pincode: details.pincode,
+            userId: user?._id,
           })
           .then(() => {
             navigate("/");

@@ -1,0 +1,109 @@
+.admin-dashboard {
+  background-color: #f8f9fa;
+  min-height: 85vh;
+  padding: 30px 15px;
+}
+
+.admin-header {
+  margin-bottom: 25px;
+}
+
+.admin-header h2 {
+  font-weight: 700;
+  color: #212529;
+}
+
+.kpi-card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+}
+
+.kpi-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+.kpi-card .card-body {
+  padding: 20px;
+}
+
+.kpi-value {
+  font-size: 2rem;
+  font-weight: 800;
+  margin: 0;
+}
+
+.kpi-label {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #6c757d;
+  font-weight: 600;
+  margin-top: 5px;
+}
+
+.admin-table-card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  background: #fff;
+}
+
+.admin-table-card .card-header {
+  background: #fff;
+  border-bottom: 1px solid #edf2f7;
+  padding: 18px 24px;
+}
+
+.table-custom th {
+  background-color: #f8fafc;
+  color: #475569;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 14px 16px;
+  border-top: none;
+}
+
+.table-custom td {
+  padding: 14px 16px;
+  vertical-align: middle;
+}
+
+.badge-role-admin {
+  background-color: #f59e0b;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.badge-role-donor {
+  background-color: #ef4444;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.badge-role-user {
+  background-color: #3b82f6;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.blood-badge {
+  background: #fee2e2;
+  color: #dc2626;
+  font-weight: 700;
+  border-radius: 6px;
+  padding: 4px 8px;
+}
+

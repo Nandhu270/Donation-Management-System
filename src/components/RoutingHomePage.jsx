@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "../pages/Home";
 import Blog from "../pages/Blog";
@@ -13,25 +13,43 @@ import Blood from "../pages/Blood";
 import Process from "../pages/Process";
 import ScrollToTop from "./ScrollTop";
 import SearchDonor from "../pages/searchdonor";
+import AdminDashboard from "../pages/AdminDashboard";
+import ProtectedRoute from "./ProtectedRoute";
+import { AuthProvider } from "../context/AuthContext";
+import { ToastProvider } from "../context/ToastContext";
 
 function HomePage() {
   return (
     <BrowserRouter>
-      <ScrollToTop />
-      <NavBar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/blog" element={<Blog />} />
-        <Route path="/contactus" element={<ContactUs />} />
-        <Route path="/donate" element={<Donate />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/blog/blood" element={<Blood />} />
-        <Route path="/blog/process" element={<Process />} />
-        <Route path="/searchdonor" element={<SearchDonor />} />
-      </Routes>
-      <Footer />
+      <AuthProvider>
+        <ToastProvider>
+          <ScrollToTop />
+          <NavBar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/contactus" element={<ContactUs />} />
+            <Route path="/donate" element={<Donate />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/blog/blood" element={<Blood />} />
+            <Route path="/blog/process" element={<Process />} />
+            <Route path="/searchdonor" element={<SearchDonor />} />
+
+            {/* Secure Admin Route */}
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute requiredRole="admin">
+                  <AdminDashboard />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+          <Footer />
+        </ToastProvider>
+      </AuthProvider>
     </BrowserRouter>
   );
 }

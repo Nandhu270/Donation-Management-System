@@ -1,19 +1,12 @@
 import React, { useEffect, useState } from "react";
-import "../css/login.css";
 import Swal from "sweetalert2";
-import {
-  Button,
-  Container,
-  Row,
-  Col,
-  Card,
-  CardBody,
-  InputGroup,
-} from "react-bootstrap";
-import { FaCheck } from "react-icons/fa";
-import Form from "react-bootstrap/Form";
-import { Link, useNavigate } from "react-router-dom";
-import { blood } from "../components/loginfile";
+import { Row, Col, Modal, Form } from "react-bootstrap";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { useToast } from "../context/ToastContext";
+import { authService } from "../services/api";
+import TailwindAlert from "../components/common/TailwindAlert";
+import PageTransition from "../components/common/PageTransition";
 import {
   FaUser,
   FaEnvelope,
@@ -23,370 +16,679 @@ import {
   FaMapMarkerAlt,
   FaFlag,
   FaHashtag,
+  FaShieldAlt,
+  FaEdit,
+  FaKey,
+  FaSignOutAlt,
+  FaLock,
+  FaEye,
+  FaEyeSlash,
+  FaHeart,
+  FaCheckCircle,
 } from "react-icons/fa";
-import "bootstrap-icons/font/bootstrap-icons.css";
-import axios from "axios";
 
 export default function Login() {
-  const [userlogin, setUserLogin] = useState({ mail: "", password: "" });
-  const [islogin, setLogin] = useState(false);
+  const { user, isAuthenticated, isAdmin, login, logout, updateProfile, changePassword } = useAuth();
+  const toast = useToast();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const [credentials, setCredentials] = useState({ mail: "", password: "" });
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
-  const [loggeduser, setLoggedUser] = useState(null);
-  const [donatedamount, setDonatedAmount] = useState(0);
+  const [submitting, setSubmitting] = useState(false);
+  const [loginAlert, setLoginAlert] = useState(null);
+
+  // Profile data
+  const [donatedAmount, setDonatedAmount] = useState(0);
+  const [donationCount, setDonationCount] = useState(0);
+
+  // Edit Profile Modal
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editForm, setEditForm] = useState({
+    name: "",
+    mobile: "",
+    address: "",
+    country: "",
+    pincode: "",
+    blood: "",
+    gender: "",
+    isAvailableForDonation: true,
+  });
+
+  // Change Password Modal
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [passwordForm, setPasswordForm] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
+  const [passwordErrors, setPasswordErrors] = useState({});
 
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    if (storedUser) {
-      setUserLogin(storedUser);
-      setLogin(true);
-      fetchUserDetails(storedUser);
+    if (user) {
+      setEditForm({
+        name: user.name || "",
+        mobile: user.mobile || "",
+        address: user.address || "",
+        country: user.country || "",
+        pincode: user.pincode || "",
+        blood: user.blood || "",
+        gender: user.gender || "",
+        isAvailableForDonation: user.isAvailableForDonation !== false,
+      });
+
+      // Fetch user's own donations
+      authService
+        .getMyDonations()
+        .then((res) => {
+          if (res.success) {
+            setDonatedAmount(res.totalAmount || 0);
+            setDonationCount(res.count || 0);
+          }
+        })
+        .catch((err) => console.log("Donations fetch error:", err));
     }
-  }, []);
+  }, [user]);
 
-  const fetchUserDetails = async (user) => {
-    try {
-      const res = await axios.get("http://localhost:5174/login");
-      const matchedUser = res.data.find(
-        (data) => data.mail === user.mail && data.password === user.password
-      );
-
-      if (matchedUser) {
-        setLoggedUser(matchedUser);
+  const validateLoginForm = () => {
+    const errs = {};
+    if (!credentials.mail) {
+      errs.mail = "Email address is required";
+    } else {
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!emailRegex.test(credentials.mail.trim())) {
+        errs.mail = "Please enter a valid email address";
       }
-    } catch (err) {
-      // alert("Error fetching user data:", err);
-      showAlert("Invalid Data", "Error fetching user data", "error");
     }
+
+    if (!credentials.password) {
+      errs.password = "Password is required";
+    }
+
+    return errs;
   };
 
-  const validateForm = () => {
-    let formErrors = {};
-
-    if (!userlogin.mail) {
-      formErrors.mail = "Email is required";
-    }
-
-    const verifyemail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    if (userlogin.mail && !verifyemail.test(userlogin.mail)) {
-      formErrors.mail = "Please enter a valid email address";
-    }
-
-    if (!userlogin.password) {
-      formErrors.password = "Password is required";
-    }
-    const verifypass =
-      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{6,}$/;
-    if (
-      userlogin.password &&
-      userlogin.password.length < 6 &&
-      !verifypass.test(userlogin.password)
-    ) {
-      formErrors.password =
-        "Password must be at least 6 characters long and special character";
-    }
-    return formErrors;
-  };
-
-  const handleSubmit = async (e) => {
+  const handleLoginSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
+    setLoginAlert(null);
 
-    const formErrors = validateForm();
+    const formErrors = validateLoginForm();
     if (Object.keys(formErrors).length > 0) {
       setErrors(formErrors);
+      toast.warning("Please enter your email and password.", "Login Form");
       return;
     }
 
     try {
-      const res = await axios.get("http://localhost:5174/login");
-      const matchedUser = res.data.find(
-        (data) =>
-          data.mail === userlogin.mail && data.password === userlogin.password
-      );
+      setSubmitting(true);
+      const res = await login(credentials.mail.trim().toLowerCase(), credentials.password);
 
-      if (matchedUser) {
-        setLogin(true);
-        setLoggedUser(matchedUser);
-        localStorage.setItem("user", JSON.stringify(userlogin));
-        localStorage.setItem("islogin", JSON.stringify(true));
-        showAlert("Hello User!..", "Logged In SuccessFully", "success");
-        navigate("/");
-      } else {
-        // alert("Invalid Mail ID or Password");
-        showAlert("Invalid Data", "Invalid Mail ID or Password", "error");
-      }
+      toast.success(`Welcome back, ${res.user.name}!`, "Login Successful");
 
-      fetchDonatedAmount(matchedUser);
-    } catch (error) {
-      // alert("Error during login or Server is Not Connected", error);
-      showAlert(
-        "Invalid Data",
-        "Error during login or Server is Not Connected",
-        "error"
-      );
-    }
-  };
-
-  function showAlert(data, msg, status) {
-    Swal.fire({
-      title: data,
-      text: msg,
-      icon: status,
-    });
-  }
-
-  useEffect(() => {
-    if (loggeduser) {
-      fetchDonatedAmount(loggeduser);
-    }
-  }, [loggeduser]);
-
-  const fetchDonatedAmount = async (user) => {
-    try {
-      const result = await axios.get("http://localhost:5174/amount");
-      let sum = 0;
-
-      result.data.forEach((data) => {
-        if (user.mail === data.mail) {
-          sum += data.amount;
-        }
+      Swal.fire({
+        title: `Welcome, ${res.user.name}!`,
+        text: `Logged in successfully as ${res.user.role.toUpperCase()}`,
+        icon: "success",
+        timer: 1800,
+        showConfirmButton: false,
       });
 
-      setDonatedAmount(sum);
+      const redirectPath = location.state?.from?.pathname || "/";
+      navigate(redirectPath);
     } catch (error) {
-      console.log("Error fetching donation amount:", error.message);
+      const msg = error.response?.data?.message || error.message || "Invalid email or password";
+      setLoginAlert(msg);
+      toast.error(msg, "Authentication Failed");
+    } finally {
+      setSubmitting(false);
     }
   };
 
-  const loggingout = () => {
-    setUserLogin({ mail: "", password: "" });
-    setLogin(false);
-    setLoggedUser(null);
-    localStorage.removeItem("user");
-    localStorage.setItem("islogin", JSON.stringify(false));
-    navigate("/");
+  const handleEditProfileSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await updateProfile(editForm);
+      setShowEditModal(false);
+      toast.success("Profile updated successfully!", "Profile Saved");
+      Swal.fire("Updated!", "Your profile information has been saved.", "success");
+    } catch (err) {
+      const msg = err.response?.data?.message || err.message || "Could not update profile.";
+      toast.error(msg, "Update Error");
+      Swal.fire("Update Failed", msg, "error");
+    }
   };
 
-  const profileDetails = loggeduser
+  const handleChangePasswordSubmit = async (e) => {
+    e.preventDefault();
+    setPasswordErrors({});
+
+    if (passwordForm.newPassword !== passwordForm.confirmPassword) {
+      setPasswordErrors({ confirmPassword: "New passwords do not match." });
+      return;
+    }
+
+    const passRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{6,}$/;
+    if (!passRegex.test(passwordForm.newPassword)) {
+      setPasswordErrors({
+        newPassword:
+          "Password must be at least 6 characters long and include a letter, number, and special character.",
+      });
+      return;
+    }
+
+    try {
+      await changePassword(passwordForm);
+      setShowPasswordModal(false);
+      setPasswordForm({ currentPassword: "", newPassword: "", confirmPassword: "" });
+      toast.success("Password updated successfully!", "Security Updated");
+      Swal.fire("Success", "Password updated successfully!", "success");
+    } catch (err) {
+      const msg = err.response?.data?.message || err.message || "Failed to change password.";
+      toast.error(msg, "Password Error");
+      Swal.fire("Error", msg, "error");
+    }
+  };
+
+  const profileDetails = user
     ? [
-        { icon: <FaUser />, label: "Name", value: loggeduser.name },
-        { icon: <FaEnvelope />, label: "Email", value: loggeduser.mail },
-        { icon: <FaTint />, label: "Blood Group", value: loggeduser.blood },
-        { icon: <FaPhoneAlt />, label: "Mobile", value: loggeduser.mobile },
-        { icon: <FaVenusMars />, label: "Gender", value: loggeduser.gender },
-        {
-          icon: <FaMapMarkerAlt />,
-          label: "Address",
-          value: loggeduser.address,
-        },
-        { icon: <FaHashtag />, label: "Pincode", value: loggeduser.pincode },
-        { icon: <FaFlag />, label: "Country", value: loggeduser.country },
+        { icon: <FaUser className="text-red-500" />, label: "Full Name", value: user.name },
+        { icon: <FaEnvelope className="text-red-500" />, label: "Email Address", value: user.mail },
+        { icon: <FaTint className="text-red-500" />, label: "Blood Group", value: user.blood },
+        { icon: <FaPhoneAlt className="text-red-500" />, label: "Mobile Number", value: user.mobile },
+        { icon: <FaVenusMars className="text-red-500" />, label: "Gender", value: user.gender },
+        { icon: <FaMapMarkerAlt className="text-red-500" />, label: "Address", value: user.address },
+        { icon: <FaHashtag className="text-red-500" />, label: "Pincode", value: user.pincode },
+        { icon: <FaFlag className="text-red-500" />, label: "Country", value: user.country },
       ]
     : [];
 
   return (
-    <>
-      {!islogin ? (
-        <>
-          0
-          <Container
-            fluid
-            className="mt-4 d-flex justify-content-center align-items-center con-login animate__animated animate__fadeIn"
-          >
-            <Row className="con-1">
-              <Col xs={12} md={6} className="info-section">
-                <h1>Welcome to Donor Portal</h1>
-                <ul>
-                  <li>
-                    <h3>
-                      <span>
-                        <FaCheck style={{ color: "inherit" }} />
-                      </span>
-                      Manage Your Donations and Recurring Plans
-                    </h3>
-                    <p>
-                      View your donations, receipts, and manage your recurring
-                      plans with your favorite organizations.
-                    </p>
-                  </li>
-                  <li>
-                    <h3>
-                      <span>
-                        <FaCheck style={{ color: "inherit" }} />
-                      </span>
-                      Quickly Donate to Your Favorite Organizations
-                    </h3>
-                    <p>
-                      You can donate to your favorite organizations without
-                      filling out the donation form. Giving has never been
-                      easier!
-                    </p>
-                  </li>
-                </ul>
-              </Col>
-
-              <Col xs={12} md={6} className="form-section">
-                <h1>Donor Login</h1>
-                <Form onSubmit={handleSubmit}>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Email Address</Form.Label>
-                    <Col xs={12} sm={11} md={11}>
-                      <Form.Control
-                        type="email"
-                        placeholder="name@example.com"
-                        value={userlogin.mail}
-                        onChange={(e) =>
-                          setUserLogin({
-                            ...userlogin,
-                            mail: e.target.value,
-                          })
-                        }
-                        isInvalid={!!errors.mail}
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        {errors.mail}
-                      </Form.Control.Feedback>
-                    </Col>
-                  </Form.Group>
-
-                  <Form.Group className="mb-3">
-                    <Form.Label>Password</Form.Label>
-                    <Col xs={12} sm={11} md={11}>
-                      <InputGroup>
-                        <Form.Control
-                          type={showPassword ? "text" : "password"}
-                          placeholder="Password"
-                          value={userlogin.password}
-                          onChange={(e) =>
-                            setUserLogin({
-                              ...userlogin,
-                              password: e.target.value,
-                            })
-                          }
-                          isInvalid={!!errors.password}
-                        />
-                        <InputGroup.Text
-                          onClick={() => setShowPassword(!showPassword)}
-                          style={{
-                            cursor: "pointer",
-                            height: "1px",
-                            marginTop: "10px",
-                            padding: "10px",
-                          }}
-                        >
-                          <i
-                            className={
-                              showPassword ? "bi bi-eye-slash" : "bi bi-eye"
-                            }
-                            style={{ padding: "5px" }}
-                          ></i>
-                        </InputGroup.Text>
-                        <Form.Control.Feedback type="invalid">
-                          {errors.password}
-                        </Form.Control.Feedback>
-                      </InputGroup>
-                    </Col>
-                  </Form.Group>
-
-                  <Form.Check type="checkbox" label="Remember Me" />
-                  <Button type="submit" variant="outline-danger mt-2 bt-log">
-                    Login
-                  </Button>
-                  <p className="mt-2">
-                    Not Registered Yet?{" "}
-                    <span>
-                      <Link to="/signup" className="link-log">
-                        Create an Account
-                      </Link>
-                    </span>
-                  </p>
-                </Form>
-              </Col>
-            </Row>
-          </Container>
-          <Container
-            fluid
-            className="d-flex align-items-center justify-content-center con-fot text-center"
-          >
-            <h4 className="animate__animated animate__fadeIn">
-              Like you, over a million people have donated to support 50,000+
-              nonprofit causes around the world. Thank you for your help in
-              making our world a better place.
-            </h4>
-          </Container>
-        </>
-      ) : (
-        <>
-          <Container
-            fluid
-            className="mt-4 d-flex justify-content-center align-items-center animate__animated animate__fadeIn"
-          >
-            <Card className="profile-card shadow-lg p-3">
-              <CardBody className="d-flex flex-column align-items-center text-white p-4">
-                <div className="profile-img mb-3">
-                  <FaUser size={70} />
+    <PageTransition className="py-10 px-4 sm:px-6 lg:px-8 bg-gray-50">
+      {!isAuthenticated ? (
+        <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+          <div className="grid grid-cols-1 md:grid-cols-2">
+            {/* Left Info Panel */}
+            <div className="bg-gradient-to-br from-red-600 to-rose-700 p-8 text-white flex flex-col justify-between">
+              <div>
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/20 rounded-full text-xs font-semibold backdrop-blur-sm mb-6">
+                  <FaShieldAlt /> Secure Authentication
                 </div>
-                <h2 className="profile-title mb-3">My Profile</h2>
-                <Row className="w-100 g-2 text-center text-md-start">
-                  {profileDetails.map((item, index) => (
-                    <Col
-                      key={index}
-                      xs={12}
-                      sm={6}
-                      className="profile-item d-flex align-items-center gap-1"
+                <h2 className="text-2xl sm:text-3xl font-extrabold mb-4 leading-tight">
+                  Welcome Back to the Donor Portal
+                </h2>
+                <p className="text-red-100 text-sm mb-6 leading-relaxed">
+                  Log in to manage your donations, track your impact, and respond to urgent life-saving requests.
+                </p>
+
+                <div className="space-y-4">
+                  <div className="flex items-start gap-3">
+                    <FaCheckCircle className="w-5 h-5 text-red-200 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <h4 className="font-bold text-sm text-white">Full Privacy Protection</h4>
+                      <p className="text-xs text-red-100">
+                        Passwords hashed with bcrypt & protected with JWT session tokens.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <FaCheckCircle className="w-5 h-5 text-red-200 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <h4 className="font-bold text-sm text-white">Blood Availability Status</h4>
+                      <p className="text-xs text-red-100">
+                        Set your availability status to respond to local blood emergency drives.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8 pt-6 border-t border-red-500/40 text-xs text-red-200">
+                Together, over 50,000+ donors are making healthcare and emergency relief possible.
+              </div>
+            </div>
+
+            {/* Right Login Form */}
+            <div className="p-8 sm:p-10 flex flex-col justify-center">
+              <h3 className="text-2xl font-bold text-gray-900 mb-1">Donor Sign In</h3>
+              <p className="text-sm text-gray-500 mb-6">Enter your registered credentials below</p>
+
+              {loginAlert && (
+                <TailwindAlert
+                  type="error"
+                  title="Invalid Credentials"
+                  message={loginAlert}
+                  onClose={() => setLoginAlert(null)}
+                  className="mb-4"
+                />
+              )}
+
+              <form onSubmit={handleLoginSubmit} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    Email Address
+                  </label>
+                  <div className="relative">
+                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                      <FaEnvelope />
+                    </span>
+                    <input
+                      type="email"
+                      placeholder="name@example.com"
+                      value={credentials.mail}
+                      onChange={(e) => setCredentials({ ...credentials, mail: e.target.value })}
+                      className={`w-full pl-10 pr-3 py-2.5 rounded-lg border text-sm transition outline-none ${
+                        errors.mail
+                          ? "border-red-500 bg-red-50/30 focus:ring-2 focus:ring-red-400"
+                          : "border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200"
+                      }`}
+                      disabled={submitting}
+                    />
+                  </div>
+                  {errors.mail && <p className="text-xs text-red-600 mt-1">{errors.mail}</p>}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    Password
+                  </label>
+                  <div className="relative">
+                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                      <FaLock />
+                    </span>
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Enter your password"
+                      value={credentials.password}
+                      onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
+                      className={`w-full pl-10 pr-10 py-2.5 rounded-lg border text-sm transition outline-none ${
+                        errors.password
+                          ? "border-red-500 bg-red-50/30 focus:ring-2 focus:ring-red-400"
+                          : "border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200"
+                      }`}
+                      disabled={submitting}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600"
                     >
-                      <span
-                        className="profile-icon"
-                        style={{ fontSize: "1.2rem" }}
-                      >
-                        {item.icon}
-                      </span>
-                      <strong className="me-1">{item.label}:</strong>{" "}
-                      <span>{item.value}</span>
-                    </Col>
-                  ))}
-                </Row>
-                <Button
-                  className="mt-3"
-                  variant="outline-danger"
-                  onClick={loggingout}
+                      {showPassword ? <FaEyeSlash /> : <FaEye />}
+                    </button>
+                  </div>
+                  {errors.password && <p className="text-xs text-red-600 mt-1">{errors.password}</p>}
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="w-full py-3 px-4 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl shadow-md transition-all active:scale-[0.99] disabled:opacity-50 flex items-center justify-center gap-2 mt-2"
                 >
-                  Logout
-                </Button>
-              </CardBody>
-            </Card>
-          </Container>
-          <Container className="d-flex align-items-center justify-content-center gap-3 mt-3 box-profile animate__animated animate__fadeIn ">
-            <Card className="profile-donate">
-              <CardBody className="text-center">
-                <h3>Amount Donated</h3>
-                <h3>{donatedamount} </h3>
-              </CardBody>
-            </Card>
-            <Card className="blood-donate">
-              <CardBody className="text-center">
-                <h3>Blood Donated</h3>
-                <h3>{blood[Math.floor(Math.random() * 8) + 1] + " Units"}</h3>
-              </CardBody>
-            </Card>
-          </Container>
-          <Container
-            fluid
-            className="d-flex align-items-center justify-content-center text-center py-4"
-          >
-            <h4
-              className="animate__animated animate__fadeIn text-muted w-75"
-              style={{ fontSize: "clamp(1rem, 2vw, 1.2rem)" }}
-            >
-              Like you, over a million people have donated to support 50,000+
-              nonprofit causes around the world. Thank you for your help in
-              making our world a better place.
-            </h4>
-          </Container>
-        </>
+                  {submitting ? (
+                    <>
+                      <svg
+                        className="animate-spin h-5 w-5 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8v8H4z"
+                        ></path>
+                      </svg>
+                      <span>Authenticating...</span>
+                    </>
+                  ) : (
+                    <span>Sign In</span>
+                  )}
+                </button>
+
+                <p className="text-center text-sm text-gray-500 pt-3">
+                  Not registered yet?{" "}
+                  <Link
+                    to="/signup"
+                    className="font-bold text-red-600 hover:text-red-700 hover:underline"
+                  >
+                    Create an Account
+                  </Link>
+                </p>
+              </form>
+            </div>
+          </div>
+        </div>
+      ) : (
+        /* Authenticated User Dashboard */
+        <div className="max-w-4xl mx-auto space-y-6">
+          {/* Profile Card */}
+          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+            {/* Top Banner */}
+            <div className="bg-gradient-to-r from-red-600 to-rose-700 p-6 text-white flex flex-col sm:flex-row items-center sm:items-start justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white text-2xl font-bold shadow-inner border border-white/30">
+                  {user?.name ? user.name[0].toUpperCase() : "U"}
+                </div>
+                <div>
+                  <h2 className="text-2xl font-extrabold">{user?.name}</h2>
+                  <p className="text-red-100 text-sm">{user?.mail}</p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <span
+                  className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
+                    user?.role === "admin"
+                      ? "bg-amber-400 text-amber-950"
+                      : user?.role === "donor"
+                      ? "bg-white text-red-600"
+                      : "bg-blue-100 text-blue-900"
+                  }`}
+                >
+                  {user?.role === "admin" && "🛡️ "}
+                  {user?.role?.toUpperCase() || "USER"}
+                </span>
+
+                <span
+                  className={`px-3 py-1 rounded-full text-xs font-bold ${
+                    user?.isAvailableForDonation
+                      ? "bg-emerald-500 text-white"
+                      : "bg-gray-400 text-white"
+                  }`}
+                >
+                  {user?.isAvailableForDonation ? "Available for Blood" : "Unavailable"}
+                </span>
+              </div>
+            </div>
+
+            {/* Profile Information Grid */}
+            <div className="p-6 sm:p-8">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-4">
+                Account Details
+              </h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                {profileDetails.map((item, idx) => (
+                  <div key={idx} className="bg-gray-50 rounded-xl p-3 border border-gray-100">
+                    <div className="flex items-center gap-2 text-xs font-semibold text-gray-500 mb-1">
+                      {item.icon}
+                      <span>{item.label}</span>
+                    </div>
+                    <div className="font-bold text-sm text-gray-900 truncate">
+                      {item.value || "N/A"}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-wrap items-center gap-3 mt-6 pt-6 border-t border-gray-100">
+                {isAdmin && (
+                  <button
+                    onClick={() => navigate("/admin")}
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-lg text-sm shadow-sm transition"
+                  >
+                    <FaShieldAlt /> Open Admin Center
+                  </button>
+                )}
+
+                <button
+                  onClick={() => setShowEditModal(true)}
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold rounded-lg text-sm transition"
+                >
+                  <FaEdit /> Edit Profile
+                </button>
+
+                <button
+                  onClick={() => setShowPasswordModal(true)}
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold rounded-lg text-sm transition"
+                >
+                  <FaKey /> Change Password
+                </button>
+
+                <button
+                  onClick={() => logout(true)}
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-red-50 hover:bg-red-100 text-red-600 font-semibold rounded-lg text-sm transition ml-auto"
+                >
+                  <FaSignOutAlt /> Sign Out
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Donation Summary Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 flex items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl flex-shrink-0">
+                <FaHeart />
+              </div>
+              <div>
+                <p className="text-xs font-bold uppercase tracking-wider text-gray-400">
+                  Total Funds Contributed
+                </p>
+                <h3 className="text-2xl font-extrabold text-emerald-600">
+                  ₹{Number(donatedAmount).toLocaleString("en-IN")}
+                </h3>
+                <p className="text-xs text-gray-500">{donationCount} donation(s) on record</p>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 flex items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center text-2xl flex-shrink-0">
+                <FaTint />
+              </div>
+              <div>
+                <p className="text-xs font-bold uppercase tracking-wider text-gray-400">
+                  Registered Blood Group
+                </p>
+                <h3 className="text-2xl font-extrabold text-red-600">{user?.blood || "N/A"}</h3>
+                <p className="text-xs text-gray-500">
+                  {user?.isAvailableForDonation
+                    ? "Active & ready to respond to alerts"
+                    : "Currently resting"}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Edit Profile Modal */}
+          <Modal show={showEditModal} onHide={() => setShowEditModal(false)} centered>
+            <Modal.Header closeButton>
+              <Modal.Title>Edit Profile Information</Modal.Title>
+            </Modal.Header>
+            <Form onSubmit={handleEditProfileSubmit}>
+              <Modal.Body className="space-y-3">
+                <Form.Group>
+                  <Form.Label>Full Name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={editForm.name}
+                    onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+                    required
+                  />
+                </Form.Group>
+                <Form.Group>
+                  <Form.Label>Mobile Phone (10 digits)</Form.Label>
+                  <Form.Control
+                    type="tel"
+                    value={editForm.mobile}
+                    onChange={(e) => setEditForm({ ...editForm, mobile: e.target.value })}
+                    required
+                  />
+                </Form.Group>
+                <Row>
+                  <Col md={6}>
+                    <Form.Group>
+                      <Form.Label>Blood Group</Form.Label>
+                      <Form.Select
+                        value={editForm.blood}
+                        onChange={(e) => setEditForm({ ...editForm, blood: e.target.value })}
+                      >
+                        <option value="A+ve">A+</option>
+                        <option value="A-ve">A-</option>
+                        <option value="B+ve">B+</option>
+                        <option value="B-ve">B-</option>
+                        <option value="O+ve">O+</option>
+                        <option value="O-ve">O-</option>
+                        <option value="AB+ve">AB+</option>
+                        <option value="AB-ve">AB-</option>
+                      </Form.Select>
+                    </Form.Group>
+                  </Col>
+                  <Col md={6}>
+                    <Form.Group>
+                      <Form.Label>Gender</Form.Label>
+                      <Form.Select
+                        value={editForm.gender}
+                        onChange={(e) => setEditForm({ ...editForm, gender: e.target.value })}
+                      >
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                      </Form.Select>
+                    </Form.Group>
+                  </Col>
+                </Row>
+                <Form.Group>
+                  <Form.Label>Address</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={editForm.address}
+                    onChange={(e) => setEditForm({ ...editForm, address: e.target.value })}
+                    required
+                  />
+                </Form.Group>
+                <Row>
+                  <Col md={6}>
+                    <Form.Group>
+                      <Form.Label>Country</Form.Label>
+                      <Form.Control
+                        type="text"
+                        value={editForm.country}
+                        onChange={(e) => setEditForm({ ...editForm, country: e.target.value })}
+                        required
+                      />
+                    </Form.Group>
+                  </Col>
+                  <Col md={6}>
+                    <Form.Group>
+                      <Form.Label>Pincode</Form.Label>
+                      <Form.Control
+                        type="number"
+                        value={editForm.pincode}
+                        onChange={(e) => setEditForm({ ...editForm, pincode: e.target.value })}
+                        required
+                      />
+                    </Form.Group>
+                  </Col>
+                </Row>
+                <Form.Check
+                  type="switch"
+                  id="modal-availability-switch"
+                  label="Available for emergency blood donation requests"
+                  checked={editForm.isAvailableForDonation}
+                  onChange={(e) =>
+                    setEditForm({ ...editForm, isAvailableForDonation: e.target.checked })
+                  }
+                  className="mt-3"
+                />
+              </Modal.Body>
+              <Modal.Footer>
+                <button
+                  type="button"
+                  className="px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-semibold"
+                  onClick={() => setShowEditModal(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white text-sm font-bold shadow-sm"
+                >
+                  Save Changes
+                </button>
+              </Modal.Footer>
+            </Form>
+          </Modal>
+
+          {/* Change Password Modal */}
+          <Modal show={showPasswordModal} onHide={() => setShowPasswordModal(false)} centered>
+            <Modal.Header closeButton>
+              <Modal.Title>Change Password</Modal.Title>
+            </Modal.Header>
+            <Form onSubmit={handleChangePasswordSubmit}>
+              <Modal.Body className="space-y-3">
+                <Form.Group>
+                  <Form.Label>Current Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    value={passwordForm.currentPassword}
+                    onChange={(e) =>
+                      setPasswordForm({ ...passwordForm, currentPassword: e.target.value })
+                    }
+                    required
+                  />
+                </Form.Group>
+                <Form.Group>
+                  <Form.Label>New Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    placeholder="Min 6 chars, letters, numbers & special character"
+                    value={passwordForm.newPassword}
+                    onChange={(e) =>
+                      setPasswordForm({ ...passwordForm, newPassword: e.target.value })
+                    }
+                    isInvalid={!!passwordErrors.newPassword}
+                    required
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {passwordErrors.newPassword}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group>
+                  <Form.Label>Confirm New Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    value={passwordForm.confirmPassword}
+                    onChange={(e) =>
+                      setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })
+                    }
+                    isInvalid={!!passwordErrors.confirmPassword}
+                    required
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {passwordErrors.confirmPassword}
+                  </Form.Control.Feedback>
+                </Form.Group>
+              </Modal.Body>
+              <Modal.Footer>
+                <button
+                  type="button"
+                  className="px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-semibold"
+                  onClick={() => setShowPasswordModal(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white text-sm font-bold shadow-sm"
+                >
+                  Update Password
+                </button>
+              </Modal.Footer>
+            </Form>
+          </Modal>
+        </div>
       )}
-    </>
+    </PageTransition>
   );
 }

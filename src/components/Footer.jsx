@@ -9,7 +9,7 @@ import {
   FaChevronRight,
 } from "react-icons/fa";
 import { useNavigate, Link, useLocation } from "react-router-dom";
-import ScrollToTop from "./ScrollTop";
+import { scrollToTop } from "./ScrollTop";
 
 function Footer() {
   const navigate = useNavigate();
@@ -47,19 +47,19 @@ function Footer() {
           </div>
           <div className="use">
             <h1>Useful Links</h1>
-            <Link to="/about" onClick={ScrollToTop}>
+            <Link to="/about" onClick={scrollToTop}>
               <FaChevronRight /> About Us
             </Link>
-            <Link to="/blog" onClick={ScrollToTop}>
+            <Link to="/blog" onClick={scrollToTop}>
               <FaChevronRight /> Blog
             </Link>
-            <Link to="/donate" onClick={ScrollToTop}>
+            <Link to="/donate" onClick={scrollToTop}>
               <FaChevronRight /> Do Charity
             </Link>
-            <Link to="/login" onClick={ScrollToTop}>
+            <Link to="/login" onClick={scrollToTop}>
               <FaChevronRight /> My Account
             </Link>
-            <Link to="/contactus" onClick={ScrollToTop}>
+            <Link to="/contactus" onClick={scrollToTop}>
               <FaChevronRight /> Contact Us
             </Link>
           </div>
