@@ -387,7 +387,7 @@ export default function Login() {
 
               <div className="flex items-center gap-2">
                 <span
-                  className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
+                  className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider inline-flex items-center gap-1 ${
                     user?.role === "admin"
                       ? "bg-amber-400 text-amber-950"
                       : user?.role === "donor"
@@ -395,7 +395,7 @@ export default function Login() {
                       : "bg-blue-100 text-blue-900"
                   }`}
                 >
-                  {user?.role === "admin" && "🛡️ "}
+                  {user?.role === "admin" && <FaShieldAlt className="text-xs" />}
                   {user?.role?.toUpperCase() || "USER"}
                 </span>
 

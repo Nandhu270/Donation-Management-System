@@ -4,7 +4,7 @@ const API_BASE_URL = "http://localhost:5174";
 
 const api = axios.create({
   baseURL: API_BASE_URL,
-  withCredentials: true, // Crucial: Allows browser to transmit and receive httpOnly cookies across ports
+  withCredentials: true,
   headers: {
     "Content-Type": "application/json",
   },
@@ -16,7 +16,6 @@ api.interceptors.response.use(
   (error) => {
     if (error.response && error.response.status === 401) {
       const code = error.response.data?.code;
-      // If token expired or invalid, trigger session expiration
       if (code === "TOKEN_EXPIRED" || code === "INVALID_TOKEN") {
         window.dispatchEvent(new Event("auth:session-expired"));
       }
@@ -63,8 +62,43 @@ export const authService = {
   },
 };
 
+// Public Content Service APIs
+export const contentService = {
+  getEmergencyRequests: async () => {
+    const response = await api.get("/api/emergency-requests");
+    return response.data;
+  },
+
+  getCampaigns: async () => {
+    const response = await api.get("/api/campaigns");
+    return response.data;
+  },
+
+  getArticles: async (category = "") => {
+    const params = category && category !== "All" ? { category } : {};
+    const response = await api.get("/api/articles", { params });
+    return response.data;
+  },
+
+  getFaqs: async () => {
+    const response = await api.get("/api/faqs");
+    return response.data;
+  },
+
+  getTestimonials: async () => {
+    const response = await api.get("/api/testimonials");
+    return response.data;
+  },
+
+  getPublicStats: async () => {
+    const response = await api.get("/api/stats/public");
+    return response.data;
+  },
+};
+
 // Admin Service APIs
 export const adminService = {
+  // Users
   getUsers: async (params = {}) => {
     const response = await api.get("/api/admin/users", { params });
     return response.data;
@@ -84,12 +118,143 @@ export const adminService = {
     const response = await api.get("/api/admin/stats");
     return response.data;
   },
+
+  // Emergency Requests
+  getEmergencyRequests: async () => {
+    const response = await api.get("/api/admin/emergency-requests");
+    return response.data;
+  },
+
+  createEmergencyRequest: async (data) => {
+    const response = await api.post("/api/admin/emergency-requests", data);
+    return response.data;
+  },
+
+  updateEmergencyRequest: async (id, data) => {
+    const response = await api.put(`/api/admin/emergency-requests/${id}`, data);
+    return response.data;
+  },
+
+  toggleEmergencyRequest: async (id) => {
+    const response = await api.patch(`/api/admin/emergency-requests/${id}/toggle`);
+    return response.data;
+  },
+
+  deleteEmergencyRequest: async (id) => {
+    const response = await api.delete(`/api/admin/emergency-requests/${id}`);
+    return response.data;
+  },
+
+  // Campaigns
+  getCampaigns: async () => {
+    const response = await api.get("/api/admin/campaigns");
+    return response.data;
+  },
+
+  createCampaign: async (data) => {
+    const response = await api.post("/api/admin/campaigns", data);
+    return response.data;
+  },
+
+  updateCampaign: async (id, data) => {
+    const response = await api.put(`/api/admin/campaigns/${id}`, data);
+    return response.data;
+  },
+
+  deleteCampaign: async (id) => {
+    const response = await api.delete(`/api/admin/campaigns/${id}`);
+    return response.data;
+  },
+
+  // Articles
+  getArticles: async () => {
+    const response = await api.get("/api/admin/articles");
+    return response.data;
+  },
+
+  createArticle: async (data) => {
+    const response = await api.post("/api/admin/articles", data);
+    return response.data;
+  },
+
+  updateArticle: async (id, data) => {
+    const response = await api.put(`/api/admin/articles/${id}`, data);
+    return response.data;
+  },
+
+  deleteArticle: async (id) => {
+    const response = await api.delete(`/api/admin/articles/${id}`);
+    return response.data;
+  },
+
+  // Inquiries Desk
+  getInquiries: async () => {
+    const response = await api.get("/api/admin/inquiries");
+    return response.data;
+  },
+
+  deleteInquiry: async (id) => {
+    const response = await api.delete(`/api/admin/inquiries/${id}`);
+    return response.data;
+  },
+
+  // Donations Ledger
+  getDonations: async () => {
+    const response = await api.get("/api/admin/donations");
+    return response.data;
+  },
+
+  deleteDonation: async (id) => {
+    const response = await api.delete(`/api/admin/donations/${id}`);
+    return response.data;
+  },
+
+  // FAQs
+  getFaqs: async () => {
+    const response = await api.get("/api/admin/faqs");
+    return response.data;
+  },
+
+  createFaq: async (data) => {
+    const response = await api.post("/api/admin/faqs", data);
+    return response.data;
+  },
+
+  updateFaq: async (id, data) => {
+    const response = await api.put(`/api/admin/faqs/${id}`, data);
+    return response.data;
+  },
+
+  deleteFaq: async (id) => {
+    const response = await api.delete(`/api/admin/faqs/${id}`);
+    return response.data;
+  },
 };
 
 // Donor Service APIs
 export const donorService = {
   searchDonors: async (params = {}) => {
     const response = await api.get("/api/donors/search", { params });
+    return response.data;
+  },
+};
+
+// General Inquiries & Contact Service
+export const contactService = {
+  submitInquiry: async (data) => {
+    const response = await api.post("/contactus", data);
+    return response.data;
+  },
+};
+
+// Donation Service
+export const donationService = {
+  createDonation: async (data) => {
+    const response = await api.post("/donate", data);
+    return response.data;
+  },
+  getAllDonations: async () => {
+    const response = await api.get("/amount");
     return response.data;
   },
 };
