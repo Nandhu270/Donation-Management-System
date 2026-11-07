@@ -74,7 +74,8 @@ export const AuthProvider = ({ children }) => {
     } finally {
       setUser(null);
 
-      // Clean up legacy localStorage keys if any existed
+      // Clean up localStorage keys
+      localStorage.removeItem("auth_token");
       localStorage.removeItem("token");
       localStorage.removeItem("user");
       localStorage.removeItem("islogin");

@@ -1,6 +1,9 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:5174";
+// Hosted API base URL with fallback to Render deployment
+export const API_BASE_URL = (
+  import.meta.env.VITE_API_BASE_URL || "https://letschangelivesserver.onrender.com"
+).replace(/\/+$/, "");
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -10,6 +13,18 @@ const api = axios.create({
   },
 });
 
+// Request Interceptor: Attach JWT Bearer token fallback for cross-origin hosting
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("auth_token") || localStorage.getItem("token");
+    if (token && !config.headers.Authorization) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
 // Response Interceptor: Handle Token Expiration and Session Termination
 api.interceptors.response.use(
   (response) => response,
@@ -17,6 +32,8 @@ api.interceptors.response.use(
     if (error.response && error.response.status === 401) {
       const code = error.response.data?.code;
       if (code === "TOKEN_EXPIRED" || code === "INVALID_TOKEN") {
+        localStorage.removeItem("auth_token");
+        localStorage.removeItem("token");
         window.dispatchEvent(new Event("auth:session-expired"));
       }
     }
@@ -28,17 +45,28 @@ api.interceptors.response.use(
 export const authService = {
   login: async (mail, password) => {
     const response = await api.post("/api/auth/login", { mail, password });
+    if (response.data?.token) {
+      localStorage.setItem("auth_token", response.data.token);
+    }
     return response.data;
   },
 
   register: async (userData) => {
     const response = await api.post("/api/auth/register", userData);
+    if (response.data?.token) {
+      localStorage.setItem("auth_token", response.data.token);
+    }
     return response.data;
   },
 
   logout: async () => {
-    const response = await api.post("/api/auth/logout");
-    return response.data;
+    try {
+      const response = await api.post("/api/auth/logout");
+      return response.data;
+    } finally {
+      localStorage.removeItem("auth_token");
+      localStorage.removeItem("token");
+    }
   },
 
   getMe: async () => {
