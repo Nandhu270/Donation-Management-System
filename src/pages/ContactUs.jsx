@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { contactService, contentService } from "../services/api";
 import { useAuth } from "../context/AuthContext";
-import {
-  FaPhoneAlt,
+import {FaPhoneAlt,
   FaEnvelope,
   FaMapMarkerAlt,
   FaClock,
